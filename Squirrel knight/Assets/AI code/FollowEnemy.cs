@@ -7,13 +7,20 @@ public class FollowEnemy : MonoBehaviour
     public float speed;
     public Transform target;
     public float minimumDistance;
+    public bool playerInRange;
 
-    private void Update()
+    public void OnTriggerStay(Collider other)
     {
-        if(Vector3.Distance(transform.position, target.position) > minimumDistance)
+        if(other.tag == "Player")
         {
-            transform.position = Vector3.MoveTowards(transform.position, target.position, speed * Time.deltaTime);
+            playerInRange = true;
+            Vector3 movePosition = Vector3.MoveTowards(transform.position, target.position, speed * Time.deltaTime);
+            Vector3 movePos = new Vector3(movePosition.x, transform.position.y, movePosition.z);
+            transform.position = movePos;
+        }else
+        {
+            playerInRange = false;
         }
-        
+
     }
 }
