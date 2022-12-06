@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class PlayerMovement: MonoBehaviour
 {
-    [SerializeField] private Rigidbody PlayerRigidbody;
+    private Rigidbody PlayerRigidbody;
+    [Header("Movement Customization")]
+    [Space]
     [SerializeField] private float playerSpeedMultiplier;
     [SerializeField] private float jumpForceMultiplier;
     [SerializeField] private bool PlayerIsGrounded;
@@ -15,14 +17,11 @@ public class PlayerMovement: MonoBehaviour
     }
     private void Update ()
     {
-        if (PlayerIsGrounded)
-        {
-            calculateMovement();
+        calculateMovement();
 
-            if (Input.GetKey(KeyCode.Space))
-            {
-                calculateJump();
-            }
+        if (Input.GetKey(KeyCode.Space) && PlayerIsGrounded)
+        {
+            calculateJump();
         }
     }
     private void calculateMovement ()
@@ -36,5 +35,19 @@ public class PlayerMovement: MonoBehaviour
     private void calculateJump ()
     {
         PlayerRigidbody.AddForce(Vector3.up * jumpForceMultiplier);
+    }
+    void OnCollisionStay(UnityEngine.Collision collision)
+    {
+        if (collision.collider.tag == "Ground")
+        {
+            PlayerIsGrounded = true;
+        }
+    }
+    void OnCollisionExit(UnityEngine.Collision collision)
+    {
+        if (collision.collider.tag == "Ground")
+        {
+            PlayerIsGrounded = false;
+        }
     }
 }
