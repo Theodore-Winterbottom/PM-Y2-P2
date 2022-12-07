@@ -13,14 +13,26 @@ public class FollowEnemy : MonoBehaviour
     {
         if(other.tag == "Player")
         {
-            playerInRange = true;
+            
             Vector3 movePosition = Vector3.MoveTowards(transform.position, target.position, speed * Time.deltaTime);
             Vector3 movePos = new Vector3(movePosition.x, transform.position.y, movePosition.z);
             transform.position = movePos;
-        }else
+        }
+
+    }
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.tag == "Player")
+        {
+            playerInRange = true;
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.tag == "Player")
         {
             playerInRange = false;
         }
-
     }
 }

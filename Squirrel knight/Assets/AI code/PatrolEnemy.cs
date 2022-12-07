@@ -18,6 +18,7 @@ public class PatrolEnemy : MonoBehaviour
         if (transform.position != patrolPoints[currentPointIndex].position && followEnemy.playerInRange == false)
         {
             transform.position = Vector3.MoveTowards(transform.position, patrolPoints[currentPointIndex].position, speed * Time.deltaTime);
+
         }else
         {
             if(once == false)
