@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class PatrolEnemy : MonoBehaviour
 {
@@ -10,16 +11,26 @@ public class PatrolEnemy : MonoBehaviour
     public FollowEnemy followEnemy;
     public float waitTime;
     int currentPointIndex;
+    private NavMeshAgent navMeshAgent;
 
     bool once;
 
+    private void Awake()
+    {
+        navMeshAgent = GetComponent<NavMeshAgent>();
+    }
+
+
     private void Update()
     {
-        if (transform.position != patrolPoints[currentPointIndex].position && followEnemy.playerInRange == false)
+        Vector3 movePoint = new Vector3(patrolPoints[currentPointIndex].position.x, transform.position.y, patrolPoints[currentPointIndex].position.z);
+        if (transform.position != movePoint && followEnemy.playerInRange == false)
         {
-            transform.position = Vector3.MoveTowards(transform.position, patrolPoints[currentPointIndex].position, speed * Time.deltaTime);
+            //transform.position = Vector3.MoveTowards(transform.position, patrolPoints[currentPointIndex].position, speed * Time.deltaTime);
+            navMeshAgent.destination = Vector3.MoveTowards(transform.position, patrolPoints[currentPointIndex].position, speed * Time.deltaTime);
 
-        }else
+        }
+        else
         {
             if(once == false)
             {
@@ -36,10 +47,12 @@ public class PatrolEnemy : MonoBehaviour
         if(currentPointIndex + 1 < patrolPoints.Count)
         {
             currentPointIndex++;
-        }else
+        }
+        else
         {
             currentPointIndex = 0;
         }
+        
         once = false;
     }
 }
