@@ -15,7 +15,7 @@ public class PlayerMovement: MonoBehaviour
     {
         PlayerRigidbody = GetComponent<Rigidbody>();
     }
-    private void Update ()
+    private void FixedUpdate ()
     {
         calculateMovement();
 
