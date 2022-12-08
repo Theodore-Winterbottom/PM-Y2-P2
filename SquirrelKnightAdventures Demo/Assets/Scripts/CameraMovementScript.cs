@@ -8,51 +8,39 @@ public class CameraMovementScript : MonoBehaviour
     [SerializeField] private float cameraSpeedMultiplier;
 
     private bool cameraIsPanning;
-    private bool cameraIsUnlocked;
-    private Collider collidedGameobject;
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.name == "left_barrier" || other.name == "right_barrier" || other.name == "middle_barrier")
-        {
-            cameraIsUnlocked = true;
-            collidedGameobject = other;
-        }
-    }
+    private float PlayerPosX;
+    private float positionDifference;
     private void FixedUpdate()
     {
-        if(cameraIsUnlocked)
+        float cameraPosX = camera.transform.position.x;
+        PlayerPosX = transform.position.x;
+        positionDifference = PlayerPosX - cameraPosX;
+        Debug.Log(positionDifference);
+        if (Mathf.Abs(positionDifference) >= 18 && !cameraIsPanning)
         {
-            calculateMovePos(collidedGameobject);
+            cameraIsPanning = true;
+            calculateMovePos();
         }
     }
-    private void calculateMovePos(Collider other)
+    private void calculateMovePos()
     {
-        while (other.name != "middle_barrier" && !cameraIsPanning)
+        for (int i = 0; Mathf.Abs(positionDifference > 0); i++)
         {
 
-            float barrierPoxX = other.transform.position.x;
+            Vector3 moveDirection = new Vector3(positionDifference, camera.transform.position.y, camera.transform.position.z);
 
-            float cameraPosX = camera.transform.position.x;
-
-            float posDifference = barrierPoxX - cameraPosX;
-            Debug.Log(posDifference);
-
-            Vector3 moveDirection = new Vector3(posDifference, camera.transform.position.y, camera.transform.position.z);
-
-            camera.AddForce(moveDirection * Mathf.Abs(posDifference) * cameraSpeedMultiplier);
-            while (posDifference < .1)
+            camera.velocity = (moveDirection * Mathf.Abs(positionDifference) * cameraSpeedMultiplier * Time.deltaTime);
+            //camera.AddForce(moveDirection * Mathf.Abs(posDifference) * cameraSpeedMultiplier);
+            if (Mathf.Abs(positionDifference) < 5)
             {
-                cameraIsPanning = true;
-                calculateMovePos(collidedGameobject);
+                StopCamera();
             }
-        } 
-
-        if(other.name == "middle_barrier")
-        {
-            camera.velocity = Vector3.zero;
-            cameraIsPanning = false;
-            cameraIsUnlocked = false;
         }
+    }
+        
+    private void StopCamera()
+    {
+        camera.velocity = Vector3.zero;
+        cameraIsPanning = false;
     }
 }
