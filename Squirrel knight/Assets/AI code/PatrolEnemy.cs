@@ -12,6 +12,7 @@ public class PatrolEnemy : MonoBehaviour
     public float waitTime;
     int currentPointIndex;
     private NavMeshAgent navMeshAgent;
+    public Transform target;
 
     bool once;
 
@@ -23,21 +24,33 @@ public class PatrolEnemy : MonoBehaviour
 
     private void Update()
     {
-        Vector3 movePoint = new Vector3(patrolPoints[currentPointIndex].position.x, transform.position.y, patrolPoints[currentPointIndex].position.z);
-        if (transform.position != movePoint && followEnemy.playerInRange == false)
+        if(followEnemy.playerInRange ==false)
         {
-            //transform.position = Vector3.MoveTowards(transform.position, patrolPoints[currentPointIndex].position, speed * Time.deltaTime);
-            navMeshAgent.destination = Vector3.MoveTowards(transform.position, patrolPoints[currentPointIndex].position, speed * Time.deltaTime);
-
-        }
-        else
-        {
-            if(once == false)
+            Vector3 movePoint = new Vector3(patrolPoints[currentPointIndex].position.x, transform.position.y, patrolPoints[currentPointIndex].position.z);
+            if (transform.position != movePoint && followEnemy.playerInRange == false)
             {
-                once = true;
-                StartCoroutine(Wait());
+                //transform.position = Vector3.MoveTowards(transform.position, patrolPoints[currentPointIndex].position, speed * Time.deltaTime);
+                navMeshAgent.destination = Vector3.MoveTowards(transform.position, patrolPoints[currentPointIndex].position, speed * Time.deltaTime);
+
             }
-            
+            else
+            {
+                if (once == false)
+                {
+                    once = true;
+                    StartCoroutine(Wait());
+                }
+
+            }
+        }
+        
+
+        if (followEnemy.playerInRange == true)
+        {
+            //Vector3 movePosition = Vector3.MoveTowards(transform.position, target.position, speed * Time.deltaTime);
+            //Vector3 movePos = new Vector3(movePosition.x, transform.position.y, movePosition.z);
+            //transform.position = movePos;
+            navMeshAgent.destination = Vector3.MoveTowards(transform.position, target.position, speed * Time.deltaTime);
         }
     }
 
