@@ -267,7 +267,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   camera: {fileID: 330585548}
-  cameraSpeedMultiplier: 15
+  cameraSpeedMultiplier: 50
 --- !u!1 &72710801
 GameObject:
   m_ObjectHideFlags: 0
