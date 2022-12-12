@@ -5,17 +5,21 @@ using UnityEngine.UI;
 
 public class PlayerHP : MonoBehaviour
 {
+    public HealthScript healthScript;
     public Slider slider;
 
-    public void SetMaxHealth(int health)
+    private void Start()
     {
-        slider.maxValue = health;
-        slider.value = health;
+        slider = GetComponent<Slider>();
     }
 
-    public void SetHealth(int health)
+    public void SetMaxHealth(int maxHealth)
     {
-        slider.value = health;
+        slider.maxValue = maxHealth;
+        slider.value = maxHealth;
     }
-
+    public void SetCurrentHealth(int health)
+    {
+        slider.value = healthScript.health;
+    }
 }
