@@ -78,6 +78,7 @@ public class CameraEditor : Editor
         EditorGUI.indentLevel = 10;
 
         EditorGUILayout.Space(5f);
+
         EditorGUILayout.LabelField("Camera Panning Script", EditorStyles.boldLabel);
         
         EditorGUI.indentLevel = 0;
@@ -88,8 +89,8 @@ public class CameraEditor : Editor
 
         EditorGUILayout.ObjectField(target_object, GUIContent.none);
         EditorGUILayout.Space(15f);
-        EditorGUILayout.LabelField("Distance Threshhold" 
-            + "                                                    Current Distance: " +
+        EditorGUILayout.LabelField("Distance From Camera Cutoff"
+            + "                                   Current Distance: " +
             (Mathf.Abs(Mathf.Round(distance_from_camera.floatValue * 100) / 100)).ToString(), EditorStyles.boldLabel);
 
         EditorGUILayout.Space(7f);
@@ -104,6 +105,8 @@ public class CameraEditor : Editor
         EditorGUILayout.LabelField("Distance From Center Cutoff", EditorStyles.boldLabel);
         EditorGUILayout.Space(7f);
         EditorGUILayout.Slider(distance_from_center_cutoff, 0, 2, GUIContent.none);
+
+        EditorGUILayout.Space(5f);
 
         serializedObject.ApplyModifiedProperties();
     }
