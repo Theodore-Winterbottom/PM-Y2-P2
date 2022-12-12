@@ -137,7 +137,6 @@ GameObject:
   - component: {fileID: 55790083}
   - component: {fileID: 55790088}
   - component: {fileID: 55790087}
-  - component: {fileID: 55790089}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -254,20 +253,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 120
   m_CollisionDetection: 1
---- !u!114 &55790089
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 55790082}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 16d9b12abe5e9d8479559805478384a5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  camera: {fileID: 330585548}
-  cameraSpeedMultiplier: 50
 --- !u!1 &72710801
 GameObject:
   m_ObjectHideFlags: 0
@@ -463,6 +448,7 @@ GameObject:
   - component: {fileID: 330585544}
   - component: {fileID: 330585547}
   - component: {fileID: 330585548}
+  - component: {fileID: 330585549}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -585,6 +571,23 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 124
   m_CollisionDetection: 1
+--- !u!114 &330585549
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 330585543}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f3635d5b1888678468dd2f683368d15a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target_object: {fileID: 55790086}
+  distance_from_camera_cutoff: 13
+  distance_from_camera: 0
+  camera_speed_multiplier: 1
+  distance_from_center_cutoff: 0.5
 --- !u!1 &410087039
 GameObject:
   m_ObjectHideFlags: 0
