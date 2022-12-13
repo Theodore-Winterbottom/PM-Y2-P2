@@ -9,18 +9,24 @@ public class PlayerHP : MonoBehaviour
     public Slider slider;
     public Image fill;
 
+    
+    public int currentHealth;
+    public GameObject maxHealth;
+    //public float maxHealth = 100f;
+
     private void Start()
     {
-        slider = GetComponent<Slider>();
+       
     }
 
     public void SetMaxHealth(int maxHealth)
     {
         slider.maxValue = maxHealth;
-        slider.value = maxHealth;
+        //slider.value = health;
     }
-    public void SethealthScript(int health)
+    public void SetHealth(int health)
     {
+        slider.value = health;
         slider.value = healthScript.health;
     }
 }

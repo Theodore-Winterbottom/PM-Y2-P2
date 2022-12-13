@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class HealthScript : MonoBehaviour
 {
-   
+    public HealthBar healthBar;
+
     // The current health of the object
     public float health = 100f;
 
@@ -19,6 +20,7 @@ public class HealthScript : MonoBehaviour
     {
         // Reduce the current health by the damage amount
         health -= damage;
+        healthBar.SetMaxHealth(damage);
 
         // Check if the object's health has reached zero
         if (health <= 0f)
@@ -29,9 +31,9 @@ public class HealthScript : MonoBehaviour
     }
 
     // Method to restore health
-    public void RestoreHealth()
+    /*public void RestoreHealth()
     {
         // Increase the current health by the healing amount
         health = Mathf.Min(health + 16.6f, maxHealth);
-    }
+    }*/
 }
