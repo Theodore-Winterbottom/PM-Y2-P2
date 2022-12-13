@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class DamagePlayerScript : MonoBehaviour
 {
+    
     // Reference to the HealthScript component on the player
     public HealthScript playerHealth;
 
@@ -27,5 +28,6 @@ public class DamagePlayerScript : MonoBehaviour
             DamagePlayer();
         }
     }
+
 }
 

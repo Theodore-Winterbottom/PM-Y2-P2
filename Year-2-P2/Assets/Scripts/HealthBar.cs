@@ -5,9 +5,9 @@ using UnityEngine.UI;
 
 public class HealthBar : MonoBehaviour
 {
-
+	public PlayerHP playerHP;
 	public Slider slider;
-	public Image fill;
+	
 
 	public void SetMaxHealth(int health)
 	{

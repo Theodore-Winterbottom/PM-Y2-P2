@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class HealthScript : MonoBehaviour
 {
+   
     // The current health of the object
     public float health = 100f;
 

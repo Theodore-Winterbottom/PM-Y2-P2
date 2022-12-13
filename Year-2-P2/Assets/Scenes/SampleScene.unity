@@ -615,7 +615,6 @@ GameObject:
   - component: {fileID: 472783718}
   - component: {fileID: 472783720}
   - component: {fileID: 472783721}
-  - component: {fileID: 472783722}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -744,6 +743,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f7862191dac29264bb32a865d056491b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  slider: {fileID: 1449108294}
+  fill: {fileID: 919234032}
   health: 100
   maxHealth: 100
   damage: 16.6
@@ -761,22 +762,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerHealth: {fileID: 472783720}
   damageAmount: 16.6
---- !u!114 &472783722
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 472783712}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 25db32d445da9db468e09ccabc59f15e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxHealth: 100
-  currentHealth: 0
-  healthBar: {fileID: 1449108295}
-  damagePlayerScript: {fileID: 472783721}
 --- !u!1 &475415205
 GameObject:
   m_ObjectHideFlags: 0
@@ -1255,7 +1240,7 @@ SphereCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1077907198}
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.9705803

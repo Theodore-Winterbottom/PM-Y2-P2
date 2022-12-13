@@ -7,6 +7,7 @@ public class PlayerHP : MonoBehaviour
 {
     public HealthScript healthScript;
     public Slider slider;
+    public Image fill;
 
     private void Start()
     {
@@ -18,7 +19,7 @@ public class PlayerHP : MonoBehaviour
         slider.maxValue = maxHealth;
         slider.value = maxHealth;
     }
-    public void SetCurrentHealth(int health)
+    public void SethealthScript(int health)
     {
         slider.value = healthScript.health;
     }
