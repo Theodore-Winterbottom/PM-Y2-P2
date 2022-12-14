@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class PlayerHP : MonoBehaviour
 {
-    public HealthScript healthScript;
+    /*public HealthScript healthScript;
     public Slider slider;
     public Image fill;
 
@@ -28,5 +28,5 @@ public class PlayerHP : MonoBehaviour
     {
         slider.value = health;
         slider.value = healthScript.health;
-    }
+    }*/
 }

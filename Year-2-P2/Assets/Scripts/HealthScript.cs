@@ -23,7 +23,7 @@ public class HealthScript : MonoBehaviour
         healthBar.SetMaxHealth(damage);
 
         // Check if the object's health has reached zero
-        if (health <= 0f)
+        if (health <= 1.001f)
         {
             // If the object's health is zero or less, destroy it
             Destroy(gameObject);
