@@ -9,7 +9,10 @@ public class UIUXScript : MonoBehaviour
 
     [SerializeField] private GameObject SettingsMenu;
 
+    [SerializeField] private LevelLoader LevelLoader;
+
     private bool GameIsPaused;
+
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
@@ -47,7 +50,7 @@ public class UIUXScript : MonoBehaviour
     }
     public void RestartGame()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        LevelLoader.LoadLevel(SceneManager.GetActiveScene().buildIndex);
         Resume();
     }
     public void LoadSettings()
