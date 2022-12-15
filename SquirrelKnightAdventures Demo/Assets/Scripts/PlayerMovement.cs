@@ -30,7 +30,7 @@ public class PlayerMovement: MonoBehaviour
 
         Vector3 direction = new Vector3(horizontalInput, 0f, 0f);
 
-        transform.Translate(direction * playerSpeedMultiplier * Time.deltaTime);
+        PlayerRigidbody.MovePosition(direction * playerSpeedMultiplier * Time.deltaTime);
     }
     private void calculateJump ()
     {
