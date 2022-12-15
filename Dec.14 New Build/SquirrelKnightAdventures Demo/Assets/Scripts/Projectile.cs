@@ -1,31 +1,29 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using TMPro;
 
 public class Projectile : MonoBehaviour
 {
-    //bullet
+    Vector3 targetPosition;
+    public float speed;
+    public HealthScript healthScript;
 
-    public GameObject bullet;
+    private void Start()
+    {
+        //targetPosition = FindObjectOfType<Rigidbody>().transform.position;
+        targetPosition = GameObject.Find("Player").transform.position;
+        healthScript = GameObject.Find("Player").GetComponent<HealthScript>();
+    }
 
-    //bullet force
+    private void Update()
+    {
+        transform.position = Vector3.MoveTowards(transform.position, targetPosition, speed * Time.deltaTime);
 
-    public float shootForce, upwardForce;
-
-    //weapon stats
-
-    public float timeBetweenShooting, spread, reloadTime, timeBetweenShots;
-    public int magazineSize, bulletsPerTap;
-    public bool allowButtonHold;
-
-    int bulletsLeft, bulletsShot;
-
-    //bools
-
-    bool shooting, readyToShoot, reloading;
-
-    //Reference
-    public Camera playerCam;
-    public Transform attackPoint;
+        if(transform.position == targetPosition)
+        {
+            healthScript.TakeDamage(healthScript.damageAmount);
+            Destroy(gameObject);
+        }
+    }
+    
 }

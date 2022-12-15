@@ -11,6 +11,14 @@ public class EnemyAi : MonoBehaviour
 
     public LayerMask whatIsGround, whatIsPlayer;
 
+    public GameObject projectile;
+
+    public float timeBetweenShots;
+
+    private float nextshotTime;
+
+    public float speed;
+
     //Patroling
 
     public Vector3 walkPoint;
@@ -24,8 +32,8 @@ public class EnemyAi : MonoBehaviour
 
     //States
 
-    public float sightRange, attackRange;
-    public bool playerInSightRange, playerInAttackRange;
+    public float sightRange, attackRange, rangeAttack;
+    public bool playerInSightRange, playerInAttackRange, playerInRangeAttack;
 
     private void Awake()
     {
@@ -39,6 +47,7 @@ public class EnemyAi : MonoBehaviour
 
         playerInSightRange = Physics.CheckSphere(transform.position, sightRange, whatIsPlayer);
         playerInAttackRange = Physics.CheckSphere(transform.position, attackRange, whatIsPlayer);
+        playerInRangeAttack = Physics.CheckSphere(transform.position, rangeAttack, whatIsPlayer);
 
         if (!playerInSightRange && !playerInAttackRange)
         {
@@ -55,6 +64,10 @@ public class EnemyAi : MonoBehaviour
             AttackPlayer();
         }
 
+        if(playerInSightRange && playerInRangeAttack)
+        {
+            RangeAttack();
+        }
 
     }
 
@@ -101,7 +114,7 @@ public class EnemyAi : MonoBehaviour
         agent.SetDestination(player.position);
     }
 
-    private void AttackPlayer()
+    public void AttackPlayer()
     {
         //Make sure enemy dosnt move
 
@@ -110,6 +123,30 @@ public class EnemyAi : MonoBehaviour
         transform.LookAt(player);
 
         if(!alreadyAttacked)
+        {
+            alreadyAttacked = true;
+            Invoke(nameof(ResetAttack), timeBetweenAttacks);
+        }
+    }
+
+    public void RangeAttack()
+    {
+        agent.SetDestination(transform.position);
+
+        transform.LookAt(player);
+
+        if (Time.time > nextshotTime)
+        {
+            Instantiate(projectile, transform.position, Quaternion.identity);
+            nextshotTime = Time.time + timeBetweenShots;
+        }
+
+        if (playerInRangeAttack == true)
+        {
+            transform.position = Vector3.MoveTowards(transform.position, player.position, -speed * Time.deltaTime);
+        }
+
+        if (!alreadyAttacked)
         {
             alreadyAttacked = true;
             Invoke(nameof(ResetAttack), timeBetweenAttacks);
