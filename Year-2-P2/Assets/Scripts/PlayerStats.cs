@@ -1,44 +1,78 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
+[Serializable]
 public class PlayerStats
 {
     public float BaseValue;
 
-    public float Value
+    public virtual float Value
     {
         get
         {
-            if (isDirty)
+            if (isDirty || BaseValue != lastBaseValue)
             {
+                lastBaseValue = BaseValue;
                 _Value = CalculateFinalValue();
                 isDirty = false;
             }
+            return _Value;
         }
     }
     
-            
-    
-    private bool isDirty = true;
-    private float _Value;
+    protected bool isDirty = true;
+    protected float _Value;
+    protected float lastBaseValue = float.MinValue;
 
-    private readonly List<StatModifier> statModifiers;
+    protected readonly List<StatModifier> statModifiers;
+    public readonly ReadOnlyCollection<StatModifier> StatModifiers;
 
-    public PlayerStats(float baseValue)
+    public PlayerStats()
     {
-        BaseValue = baseValue;
         statModifiers = new List<StatModifier>();
-
+        StatModifiers = statModifiers.AsReadOnly();
     }
 
-    public void AddModifier(StatModifier mod)
+    public PlayerStats(float baseValue) : this()
+    {
+        BaseValue = baseValue;
+    }
+
+    public virtual void AddModifier(StatModifier mod)
     {
         isDirty = true;
         statModifiers.Add(mod);
         statModifiers.Sort(ComapareModifierOrder);
     }
 
-    private int ComapareModifierOrder(StatModifier a, StatModifier b)
+    public virtual bool RemoveModifier(StatModifier mod)
+    {
+        if (statModifiers.Remove(mod))
+        {
+            isDirty = true;
+            return true;
+        }
+        return false;
+    }
+
+    public virtual bool RemoveAllModifiersFromSource(object source)
+    {
+        bool didRemove = false;
+
+        for (int i = statModifiers.Count - 1; i >= 0; i--)
+        {
+            if (statModifiers[i].Source == source)
+            {
+                isDirty = true;
+                didRemove = true;
+                statModifiers.RemoveAt(i);
+            }
+        }
+        return didRemove;
+    }
+
+    protected virtual int ComapareModifierOrder(StatModifier a, StatModifier b)
     {
         if(a.Order < b.Order)
             return -1;
@@ -47,25 +81,7 @@ public class PlayerStats
         return 0; // if (a.Order == b.Order)
     }
 
-    public bool RemoveModifier(StatModifier mod)
-    {
-        isDirty = true;
-        return statModifiers.Remove(mod);
-    }
-
-    public bool RemoveAllModifiersFromSource(object source)
-    {
-        for (int i = statModifiers.Count - 1; i >= 0; i--)
-        {
-            if(statModifiers[i].Source == source)
-            {
-                isDirty = true;
-                statModifiers.RemoveAt(i);
-            }
-        }
-    }
-
-    private float CalculateFinalValue()
+    protected virtual float CalculateFinalValue()
     {
         float finalValue = BaseValue;
         float sumPercentAdd = 0;
@@ -91,10 +107,8 @@ public class PlayerStats
             else if(mod.Type == StatModType.PercentMult)
             {
                 finalValue *= 1 + mod.Value;
-            }
-            
+            } 
         }
-
         // 12.0001f != 12f
         return (float)Math.Round(finalValue, 4);
     }
