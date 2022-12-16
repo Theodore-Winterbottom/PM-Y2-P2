@@ -2,52 +2,51 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerMovement: MonoBehaviour
+public class PlayerMovement : MonoBehaviour
 {
-    private Rigidbody PlayerRigidbody;
+    private Rigidbody playerRigidbody;
     [Header("Movement Customization")]
     [Space]
     [SerializeField] private float playerSpeedMultiplier;
     [SerializeField] private float jumpForceMultiplier;
-    [SerializeField] private bool PlayerIsGrounded;
 
-    private void Start ()
+    private void Start()
     {
-        PlayerRigidbody = GetComponent<Rigidbody>();
+        playerRigidbody = GetComponent<Rigidbody>();
     }
-    private void FixedUpdate ()
+    
+    private void FixedUpdate()
     {
-        calculateMovement();
+        CalculateMovement();
 
-        if (Input.GetKey(KeyCode.Space) && PlayerIsGrounded)
+        if (Input.GetKey(KeyCode.Space) && CheckIsGrounded())
         {
-            calculateJump();
+            CalculateJump();
         }
     }
-    private void calculateMovement ()
+    public bool CheckIsGrounded()
+    {
+        float _distanceToTheGround = GetComponent<Collider>().bounds.extents.y;
+        return Physics.Raycast(transform.position, Vector3.down, _distanceToTheGround + 0.1f);
+    }
+    private void CalculateMovement()
     {
         float horizontalInput = Input.GetAxis("Horizontal");
 
-        Vector3 direction = new Vector3(horizontalInput, 0f, 0f);
+        Vector3 direction = new Vector3(horizontalInput, 0, 0);
 
-        PlayerRigidbody.MovePosition(direction * playerSpeedMultiplier * Time.deltaTime);
-    }
-    private void calculateJump ()
-    {
-        PlayerRigidbody.AddForce(Vector3.up * jumpForceMultiplier);
-    }
-    void OnCollisionStay(UnityEngine.Collision collision)
-    {
-        if (collision.collider.tag == "Ground")
+        if (!CheckIfObstacles(direction))
         {
-            PlayerIsGrounded = true;
+            transform.Translate(direction * playerSpeedMultiplier * Time.deltaTime);
         }
     }
-    void OnCollisionExit(UnityEngine.Collision collision)
+    public bool CheckIfObstacles(Vector3 moveDirection)
     {
-        if (collision.collider.tag == "Ground")
-        {
-            PlayerIsGrounded = false;
-        }
+        float _distanceToBarrier = GetComponent<Collider>().bounds.extents.x;
+        return Physics.Raycast(transform.position, moveDirection, _distanceToBarrier + 0.1f);
+    }
+    private void CalculateJump()
+    {
+        playerRigidbody.AddForce(Vector3.up * jumpForceMultiplier * 200 * Time.deltaTime);
     }
 }
