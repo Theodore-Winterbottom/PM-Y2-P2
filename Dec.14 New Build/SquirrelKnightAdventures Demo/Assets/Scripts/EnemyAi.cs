@@ -158,4 +158,9 @@ public class EnemyAi : MonoBehaviour
         alreadyAttacked = false;
     }
 
+    public void Death()
+    {
+        Destroy(gameObject);
+    }
+
 }

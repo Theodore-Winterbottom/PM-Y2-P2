@@ -24,26 +24,30 @@ public class CameraPanningScript : MonoBehaviour
     }
     private void calculateDistance ()
     {
-        distance_from_camera = target_object.position.x - GetComponent<Transform>().position.x;
+        if (target_object != null)
+        {
+            distance_from_camera = target_object.position.x - GetComponent<Transform>().position.x;
 
-        if (Mathf.Abs(distance_from_camera) <= distance_from_center_cutoff)
-        {
-            GetComponent<Rigidbody>().velocity = Vector3.zero;
-        }
+            if (Mathf.Abs(distance_from_camera) <= distance_from_center_cutoff)
+            {
+                GetComponent<Rigidbody>().velocity = Vector3.zero;
+            }
 
-        if (Mathf.Abs(distance_from_camera) > distance_from_camera_cutoff)
-        {
-            InRange = true;
-        }
-        else 
-        {
-            InRange = false;
-        }
+            if (Mathf.Abs(distance_from_camera) > distance_from_camera_cutoff)
+            {
+                InRange = true;
+            }
+            else
+            {
+                InRange = false;
+            }
 
-        if (InRange)
-        {
-            panCamera();
+            if (InRange)
+            {
+                panCamera();
+            }
         }
+        
     }
     private void panCamera()
     {
