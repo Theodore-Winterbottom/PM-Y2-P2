@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class Sword : MonoBehaviour
 {
-    Animator anim;
+    public Animator anim;
     public EnemyAi enemyAi;
 
     // Start is called before the first frame update
     void Start()
     {
-        anim = GetComponent<Animator>();
+        
     }
 
     // Update is called once per frame
@@ -31,9 +31,10 @@ public class Sword : MonoBehaviour
     }
     public void OnTriggerEnter(Collider other)
     {
-        if(other.tag == "Enemy")
+        if(other.tag == "Enemy" && anim.GetBool("attacking"))
         {
             enemyAi.Death();
         }
     }
+
 }

@@ -10,6 +10,7 @@ public class PlayerMovement: MonoBehaviour
     [SerializeField] private float playerSpeedMultiplier;
     [SerializeField] private float jumpForceMultiplier;
     [SerializeField] private bool PlayerIsGrounded;
+    [SerializeField] private bool facingRight = true;
 
     private void Start ()
     {
@@ -31,6 +32,16 @@ public class PlayerMovement: MonoBehaviour
         Vector3 direction = new Vector3(horizontalInput, 0f, 0f);
 
         transform.Translate(direction * playerSpeedMultiplier * Time.deltaTime);
+
+        if(horizontalInput > 0 && facingRight)
+        {
+            Flip();
+        }
+
+        if(horizontalInput < 0 && !facingRight)
+        {
+            Flip();
+        }
     }
     private void calculateJump ()
     {
@@ -49,5 +60,14 @@ public class PlayerMovement: MonoBehaviour
         {
             PlayerIsGrounded = false;
         }
+    }
+
+    private void Flip()
+    {
+        Vector3 currentScale = gameObject.transform.localScale;
+        currentScale.x *= -1;
+        gameObject.transform.localScale = currentScale;
+
+        facingRight = !facingRight;
     }
 }

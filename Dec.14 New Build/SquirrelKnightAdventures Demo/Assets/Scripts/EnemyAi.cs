@@ -19,6 +19,8 @@ public class EnemyAi : MonoBehaviour
 
     public float speed;
 
+    public Animator anim;
+
     //Patroling
 
     public Vector3 walkPoint;
@@ -62,12 +64,18 @@ public class EnemyAi : MonoBehaviour
         if (playerInSightRange && playerInAttackRange)
         {
             AttackPlayer();
+            anim.SetBool("enemyAttacking", true);
+        }
+        else if (!playerInAttackRange)
+        {
+            anim.SetBool("enemyAttacking", false);
         }
 
-        if(playerInSightRange && playerInRangeAttack)
+        if (playerInSightRange && playerInRangeAttack)
         {
             RangeAttack();
         }
+        
 
     }
 
@@ -116,13 +124,13 @@ public class EnemyAi : MonoBehaviour
 
     public void AttackPlayer()
     {
-        //Make sure enemy dosnt move
+       
 
         agent.SetDestination(transform.position);
 
         transform.LookAt(player);
 
-        if(!alreadyAttacked)
+        if (!alreadyAttacked)
         {
             alreadyAttacked = true;
             Invoke(nameof(ResetAttack), timeBetweenAttacks);
