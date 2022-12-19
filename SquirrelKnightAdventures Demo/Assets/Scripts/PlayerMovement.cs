@@ -13,10 +13,12 @@ public class PlayerMovement : MonoBehaviour
     private void Start()
     {
         playerRigidbody = GetComponent<Rigidbody>();
+        
     }
     
     private void FixedUpdate()
     {
+        CheckIsGrounded();
         CalculateMovement();
 
         if (Input.GetKey(KeyCode.Space) && CheckIsGrounded())
@@ -26,8 +28,13 @@ public class PlayerMovement : MonoBehaviour
     }
     public bool CheckIsGrounded()
     {
+        
         float _distanceToTheGround = GetComponent<Collider>().bounds.extents.y;
-        return Physics.Raycast(transform.position, Vector3.down, _distanceToTheGround + 0.1f);
+        bool isGrounded = Physics.Raycast(transform.position, Vector3.down, _distanceToTheGround + 0.1f);
+        DrawThickLine(transform.position, transform.position + Vector3.down * (_distanceToTheGround + 0.1f), isGrounded ? Color.green : Color.red, .1f);
+        bool ground = Physics.SphereCast(transform.position, 500, Vector3.down, out RaycastHit hitInfo, _distanceToTheGround + 0.1f);
+        Debug.Log(ground);
+        return ground;
     }
     private void CalculateMovement()
     {
@@ -43,10 +50,28 @@ public class PlayerMovement : MonoBehaviour
     public bool CheckIfObstacles(Vector3 moveDirection)
     {
         float _distanceToBarrier = GetComponent<Collider>().bounds.extents.x;
-        return Physics.Raycast(transform.position, moveDirection, _distanceToBarrier + 0.1f);
+        //bool hasObstacle = Physics.Raycast(transform.position, moveDirection, _distanceToBarrier + 0.1f);
+
+        // visualize the raycast using Debug.DrawRay
+        //DrawThickLine(transform.position, transform.position + moveDirection * (_distanceToBarrier + 0.1f), hasObstacle ? Color.red : Color.green, .1f);
+        return Physics.BoxCast(transform.position, Vector3.one * _distanceToBarrier, moveDirection, out RaycastHit hitInfo, Quaternion.identity, _distanceToBarrier + 0.1f);
     }
+
     private void CalculateJump()
     {
-        playerRigidbody.AddForce(Vector3.up * jumpForceMultiplier * 200 * Time.deltaTime);
+        playerRigidbody.AddForce(Vector3.up * jumpForceMultiplier, ForceMode.Impulse);
+    }
+    private void DrawThickLine(Vector3 start, Vector3 end, Color color, float thickness)
+    {
+        // calculate the offset vectors
+        Vector3 offset = (end - start).normalized * thickness * 0.5f;
+        Vector3 offset1 = Quaternion.Euler(0, 90, 0) * offset;
+        Vector3 offset2 = Quaternion.Euler(0, -90, 0) * offset;
+
+        // draw the lines with the offset vectors
+        Debug.DrawLine(start - offset1, end - offset1, color);
+        Debug.DrawLine(start - offset2, end - offset2, color);
+        Debug.DrawLine(start + offset1, end + offset1, color);
+        Debug.DrawLine(start + offset2, end + offset2, color);
     }
 }
