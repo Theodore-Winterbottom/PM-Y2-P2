@@ -9,6 +9,7 @@ public class PlayerMovement : MonoBehaviour
     [Space]
     [SerializeField] private float playerSpeedMultiplier;
     [SerializeField] private float jumpForceMultiplier;
+    [SerializeField] private LayerMask layermask;
 
     private void Start()
     {
@@ -18,7 +19,7 @@ public class PlayerMovement : MonoBehaviour
     
     private void FixedUpdate()
     {
-        CheckIsGrounded();
+        Debug.Log(CheckIsGrounded());
         CalculateMovement();
 
         if (Input.GetKey(KeyCode.Space) && CheckIsGrounded())
@@ -28,13 +29,10 @@ public class PlayerMovement : MonoBehaviour
     }
     public bool CheckIsGrounded()
     {
-        
         float _distanceToTheGround = GetComponent<Collider>().bounds.extents.y;
-        bool isGrounded = Physics.Raycast(transform.position, Vector3.down, _distanceToTheGround + 0.1f);
-        DrawThickLine(transform.position, transform.position + Vector3.down * (_distanceToTheGround + 0.1f), isGrounded ? Color.green : Color.red, .1f);
-        bool ground = Physics.SphereCast(transform.position, 500, Vector3.down, out RaycastHit hitInfo, _distanceToTheGround + 0.1f);
-        Debug.Log(ground);
-        return ground;
+        Debug.DrawRay(transform.position, -transform.up, Color.white, _distanceToTheGround + 0.1f);
+        return Physics.SphereCast(transform.position, 1, -transform.up, out RaycastHit hitInfo,
+            _distanceToTheGround + 0.1f, layermask, QueryTriggerInteraction.UseGlobal);
     }
     private void CalculateMovement()
     {
@@ -60,18 +58,5 @@ public class PlayerMovement : MonoBehaviour
     private void CalculateJump()
     {
         playerRigidbody.AddForce(Vector3.up * jumpForceMultiplier, ForceMode.Impulse);
-    }
-    private void DrawThickLine(Vector3 start, Vector3 end, Color color, float thickness)
-    {
-        // calculate the offset vectors
-        Vector3 offset = (end - start).normalized * thickness * 0.5f;
-        Vector3 offset1 = Quaternion.Euler(0, 90, 0) * offset;
-        Vector3 offset2 = Quaternion.Euler(0, -90, 0) * offset;
-
-        // draw the lines with the offset vectors
-        Debug.DrawLine(start - offset1, end - offset1, color);
-        Debug.DrawLine(start - offset2, end - offset2, color);
-        Debug.DrawLine(start + offset1, end + offset1, color);
-        Debug.DrawLine(start + offset2, end + offset2, color);
     }
 }
