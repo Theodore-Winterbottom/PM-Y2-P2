@@ -10,6 +10,9 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float playerSpeedMultiplier;
     [SerializeField] private float jumpForceMultiplier;
     [SerializeField] private LayerMask layermask;
+    [SerializeField] private Vector3 SphereRadius;
+    [SerializeField] private float distanceToGroundOffset;
+    private float _distanceToTheGround;
 
     private void Start()
     {
@@ -29,10 +32,10 @@ public class PlayerMovement : MonoBehaviour
     }
     public bool CheckIsGrounded()
     {
-        float _distanceToTheGround = GetComponent<Collider>().bounds.extents.y;
-        Debug.DrawRay(transform.position, -transform.up, Color.white, _distanceToTheGround + 0.1f);
-        return Physics.SphereCast(transform.position, 1, -transform.up, out RaycastHit hitInfo,
-            _distanceToTheGround + 0.1f, layermask, QueryTriggerInteraction.UseGlobal);
+        _distanceToTheGround = GetComponent<Collider>().bounds.extents.y + distanceToGroundOffset;
+        //Debug.DrawRay(transform.position, -transform.up, Color.white, _distanceToTheGround);
+        return Physics.BoxCast(transform.position, SphereRadius, -transform.up, transform.rotation,
+            _distanceToTheGround, layermask, QueryTriggerInteraction.UseGlobal);
     }
     private void CalculateMovement()
     {
@@ -58,5 +61,11 @@ public class PlayerMovement : MonoBehaviour
     private void CalculateJump()
     {
         playerRigidbody.AddForce(Vector3.up * jumpForceMultiplier, ForceMode.Impulse);
+    }
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.red;
+        Debug.DrawLine(transform.position, transform.position + -transform.up * _distanceToTheGround);
+        Gizmos.DrawWireCube(transform.position + -transform.up * _distanceToTheGround, SphereRadius);
     }
 }

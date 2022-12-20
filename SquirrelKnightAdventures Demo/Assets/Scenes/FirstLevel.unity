@@ -235,10 +235,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerSpeedMultiplier: 20
-  jumpForceMultiplier: 12
+  jumpForceMultiplier: 1
   layermask:
     serializedVersion: 2
     m_Bits: 2147483647
+  SphereRadius: {x: 1, y: 1, z: 1}
+  distanceToGroundOffset: -0.23
 --- !u!54 &55790088
 Rigidbody:
   m_ObjectHideFlags: 0
