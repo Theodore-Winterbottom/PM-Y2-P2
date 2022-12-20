@@ -137,7 +137,7 @@ GameObject:
   - component: {fileID: 55790083}
   - component: {fileID: 55790088}
   - component: {fileID: 55790087}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -215,7 +215,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 55790082}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 6.13, z: 0.25}
+  m_LocalPosition: {x: -8.01, y: 4.01, z: -0.029}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -235,12 +235,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerSpeedMultiplier: 20
-  jumpForceMultiplier: 1
+  jumpForceMultiplier: 10
   layermask:
     serializedVersion: 2
     m_Bits: 2147483647
-  SphereRadius: {x: 1, y: 1, z: 1}
-  distanceToGroundOffset: -0.23
+  GroundBoxRadius: {x: 0, y: 1, z: 0}
+  ObsicalBoxRadius: {x: 0, y: 0, z: 0}
+  distanceToGroundOffset: 0.5
 --- !u!54 &55790088
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -762,7 +763,7 @@ Transform:
   m_GameObject: {fileID: 148317111}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -1.5, y: 3.77, z: 0}
-  m_LocalScale: {x: 7, y: 2.335163, z: 1}
+  m_LocalScale: {x: 7, y: 2.335163, z: 1.4399}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -4607,8 +4608,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1451663489}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -6.25, y: -0.98, z: 0}
-  m_LocalScale: {x: 7, y: 2.335163, z: 1}
+  m_LocalPosition: {x: -6.25, y: -0.98, z: 0.26}
+  m_LocalScale: {x: 7, y: 2.335163, z: 1.5903}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
