@@ -20,6 +20,7 @@ public class EnemyAi : MonoBehaviour
     public float speed;
 
     public Animator anim;
+    public Rigidbody rb;
 
     //Patroling
 
@@ -36,6 +37,7 @@ public class EnemyAi : MonoBehaviour
 
     public float sightRange, attackRange, rangeAttack;
     public bool playerInSightRange, playerInAttackRange, playerInRangeAttack;
+    [SerializeField] private bool facingRight = true;
 
     private void Awake()
     {
@@ -75,7 +77,20 @@ public class EnemyAi : MonoBehaviour
         {
             RangeAttack();
         }
-        
+
+        if (rb.velocity.z > 0 && facingRight)
+        {
+            Debug.Log("flip");
+            Flip();
+        }
+
+        if (rb.velocity.z < 0 && !facingRight)
+        {
+            Debug.Log("flip2");
+
+            Flip();
+        }
+
 
     }
 
@@ -99,6 +114,8 @@ public class EnemyAi : MonoBehaviour
         {
             walkPointSet = false;
         }
+
+        
     }
 
     private void SearchWalkPoint()
@@ -115,6 +132,15 @@ public class EnemyAi : MonoBehaviour
             walkPointSet = true;
         }
 
+    }
+
+    private void Flip()
+    {
+        Vector3 currentScale = gameObject.transform.localScale;
+        currentScale.x *= -1;
+        gameObject.transform.localScale = currentScale;
+
+        facingRight = !facingRight;
     }
 
     private void ChasePlayer()
