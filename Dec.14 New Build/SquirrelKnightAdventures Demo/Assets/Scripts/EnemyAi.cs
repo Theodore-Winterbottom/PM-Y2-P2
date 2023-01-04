@@ -22,6 +22,9 @@ public class EnemyAi : MonoBehaviour
     public Animator anim;
     public Rigidbody rb;
 
+    public Vector3 previous;
+    public float velocity;
+
     //Patroling
 
     public Vector3 walkPoint;
@@ -48,6 +51,12 @@ public class EnemyAi : MonoBehaviour
     private void FixedUpdate()
     {
         //Check for sight and attack range
+        //Debug.Log(rb.velocity);
+
+        velocity = ((transform.position - previous).magnitude) / Time.deltaTime;
+        previous = transform.position;
+ 
+        print (velocity);
 
         playerInSightRange = Physics.CheckSphere(transform.position, sightRange, whatIsPlayer);
         playerInAttackRange = Physics.CheckSphere(transform.position, attackRange, whatIsPlayer);
@@ -78,13 +87,13 @@ public class EnemyAi : MonoBehaviour
             RangeAttack();
         }
 
-        if (rb.velocity.z > 0 && facingRight)
+        if (rb.velocity.x > 0 && facingRight)
         {
             Debug.Log("flip");
             Flip();
         }
 
-        if (rb.velocity.z < 0 && !facingRight)
+        if (rb.velocity.x < 0 && !facingRight)
         {
             Debug.Log("flip2");
 
