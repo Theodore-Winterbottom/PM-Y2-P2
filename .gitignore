@@ -66,6 +66,5 @@ crashlytics-build.properties
 
 # Packed Addressables
 /[Aa]ssets/[Aa]ddressable[Aa]ssets[Dd]ata/*/*.bin*
-/Dec.14 New Build/SquirrelKnightAdventures Demo/Assets/NavMeshComponents-master/Assets/Examples/Terrains/layer_LightmapWithFog(2048.000,2048.000)(0.000,0.000)(0.000,0.000,0.000),0.000,0.000.terrainlayer.meta
 
 # Temporary auto-generated Android Assets
