@@ -1,21 +1,23 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 
 #region Main Script
 public class CameraPanningScript : MonoBehaviour
 {
-    [SerializeField] Transform target_object;
+    [SerializeField] 
+    Transform target_object;
 
-    [SerializeField] float distance_from_camera_cutoff;
+    [SerializeField] 
+    float distance_from_camera_cutoff;
 
-    [SerializeField] float distance_from_camera;
+    [SerializeField] 
+    float distance_from_camera;
 
-    [SerializeField] float camera_speed_multiplier;
+    [SerializeField] 
+    float camera_speed_multiplier;
 
-    [SerializeField] float distance_from_center_cutoff;
+    [SerializeField] 
+    float distance_from_center_cutoff;
 
     private bool InRange;
     private void FixedUpdate()
