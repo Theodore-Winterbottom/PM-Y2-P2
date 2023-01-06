@@ -12,7 +12,7 @@ public class HealthScript : MonoBehaviour
     [Tooltip("Place the Health Slider Here")] [SerializeField] private Slider slider;
 
     [Range(0f, 30f)]
-    [Tooltip("Amount of damage to apply when the object is hit")] [SerializeField] public float damageAmount = 16.6f;
+    [Tooltip("Amount of damage to apply when the object is hit")] [SerializeField] private float damageAmount = 16.6f;
 
     [Range(0f, 100f)]
     [Tooltip("The current health of the object")] [SerializeField] private float health = 100f;
@@ -20,7 +20,7 @@ public class HealthScript : MonoBehaviour
     [Tooltip("Damage to be applied when the object is hit")] [SerializeField] private float damage = 16.6f;
 
     // Method to take damage
-    public void TakeDamage(float damage)
+    private void TakeDamage(float damage)
     {
         // Reduce the current health by the damage amount
         health -= damage;
@@ -47,6 +47,15 @@ public class HealthScript : MonoBehaviour
         slider.value -= health;
     }
 
-
+    // When the player is hit by an enemy player takes damage
+    private void OnCollisionEnter(Collision collision)
+    {
+        // Enemy deals damage to the player if enemy hits player
+        if (collision.gameObject.tag == "Enemy")
+        {
+            // Apply damage to the player using the HealthScript component
+            TakeDamage(damageAmount);
+        }
+    }
 
 }

@@ -8,8 +8,11 @@ public class PlayerMovement: MonoBehaviour
     [Header("Movement Customization")]
     [Space]
     [SerializeField] private float playerSpeedMultiplier;
+
     [SerializeField] private float jumpForceMultiplier;
+
     [SerializeField] private bool PlayerIsGrounded;
+
     [SerializeField] private bool facingRight = true;
 
     private void Start ()

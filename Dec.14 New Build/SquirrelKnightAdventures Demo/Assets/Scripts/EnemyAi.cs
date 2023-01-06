@@ -2,76 +2,101 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.EventSystems;
 
 public class EnemyAi : MonoBehaviour
 {
-    public NavMeshAgent agent;
 
-    public Transform player;
+    [Header("Objects attach to player")]
 
-    public LayerMask whatIsGround, whatIsPlayer;
+    [SerializeField] private NavMeshAgent agent;
 
-    public GameObject projectile;
+    [SerializeField] private Transform player;
 
-    public float timeBetweenShots;
+    [SerializeField] private LayerMask whatIsGround, whatIsPlayer;
 
-    private float nextshotTime;
+    [SerializeField] private GameObject projectile;
 
-    public float speed;
+    [SerializeField] private Animator anim;
 
-    public Animator anim;
-    public Rigidbody rb;
+    [SerializeField] private Rigidbody rb;
 
-    public Vector3 previous;
-    public float velocity;
+    [Header("Patroling")]
 
-    //Patroling
+    [SerializeField] private Vector3 walkPoint;
 
-    public Vector3 walkPoint;
-    bool walkPointSet;
-    public float walkPointRange;
+    [SerializeField] public bool walkPointSet;
 
-    //Attacking
+    [SerializeField] private float walkPointRange;
 
-    public float timeBetweenAttacks;
-    bool alreadyAttacked;
+    [SerializeField] private Vector3 _lastPosition;
 
-    //States
+    [SerializeField] private float velocity;
 
-    public float sightRange, attackRange, rangeAttack;
-    public bool playerInSightRange, playerInAttackRange, playerInRangeAttack;
-    [SerializeField] private bool facingRight = true;
+    [Header("Attacking")]
 
+    [SerializeField] private float timeBetweenAttacks;
+
+    [SerializeField] private float timeBetweenShots;
+
+    [SerializeField] private float nextshotTime;
+
+    [SerializeField] private bool alreadyAttacked;
+
+    [Header("States")]
+
+    [SerializeField] private float sightRange, attackRange, rangeAttack;
+    
+    [SerializeField] public bool playerInSightRange, playerInAttackRange, playerInRangeAttack;
+
+    [SerializeField] private float speed;
+    public Vector3 lastpoint;
+    public Vector3 currentPosition;
+    public bool settinglast;
+    public float moveDirectionF;
+    public float LastPositionF;
+    public Vector3 moveDirection;
     private void Awake()
     {
+        //Finds enemys NavMeshAgent, Transform and lastpositon when the game starts
+        _lastPosition = agent.transform.position;
         player = GameObject.Find("Player").transform;
         agent = GetComponent<NavMeshAgent>();
+        
     }
-
+    private void Update()
+    {
+        if (!settinglast)
+        {
+            settinglast = true;
+            StartCoroutine(setLastPosition());
+        }
+        
+        currentPosition = agent.transform.position;
+    }
     private void FixedUpdate()
     {
         //Check for sight and attack range
-        //Debug.Log(rb.velocity);
 
-        velocity = ((transform.position - previous).magnitude) / Time.deltaTime;
-        previous = transform.position;
- 
-        print (velocity);
+        
 
         playerInSightRange = Physics.CheckSphere(transform.position, sightRange, whatIsPlayer);
         playerInAttackRange = Physics.CheckSphere(transform.position, attackRange, whatIsPlayer);
         playerInRangeAttack = Physics.CheckSphere(transform.position, rangeAttack, whatIsPlayer);
 
+        //Patroling the area if not attacking or chaseing the player
         if (!playerInSightRange && !playerInAttackRange)
         {
             Patroling();
         }
 
+        //chases player if it is in the dection field
         if (playerInSightRange && !playerInAttackRange)
         {
             ChasePlayer();
         }
 
+        //Attacks player if it is in range
         if (playerInSightRange && playerInAttackRange)
         {
             AttackPlayer();
@@ -82,34 +107,47 @@ public class EnemyAi : MonoBehaviour
             anim.SetBool("enemyAttacking", false);
         }
 
+        //Attacks with range attack if in range
         if (playerInSightRange && playerInRangeAttack)
         {
             RangeAttack();
         }
 
-        if (rb.velocity.x > 0 && facingRight)
+
+        float playerdistance = (transform.position - player.position).magnitude;
+
+        moveDirection = currentPosition - _lastPosition;
+        
+        if (Mathf.Sign(moveDirection.x) == agent.transform.localScale.x && playerdistance != 1f)
         {
-            Debug.Log("flip");
-            Flip();
+            if(moveDirection.x < 0)
+            {
+                Debug.Log("Facing Right");
+                moveDirectionF = Mathf.Sign(moveDirection.x);
+                LastPositionF = Mathf.Sign(_lastPosition.x);
+                lastpoint = _lastPosition;
+                flipEnemy();
+            }
+            else
+            {
+                Debug.Log("Facing Left");
+                moveDirectionF = Mathf.Sign(moveDirection.x);
+                LastPositionF = Mathf.Sign(_lastPosition.x);
+                lastpoint = _lastPosition;
+                flipEnemy();
+            }
         }
-
-        if (rb.velocity.x < 0 && !facingRight)
-        {
-            Debug.Log("flip2");
-
-            Flip();
-        }
-
-
     }
 
     private void Patroling()
     {
+        //If no walkpoint finds walk point
         if (!walkPointSet)
         {
             SearchWalkPoint();
         }
 
+        //moves to the walkpoint
         if(walkPointSet)
         {
             agent.SetDestination(walkPoint);
@@ -118,7 +156,6 @@ public class EnemyAi : MonoBehaviour
         Vector3 distanceToWalkPoint = transform.position - walkPoint;
 
         //Walkpoint reached
-
         if(distanceToWalkPoint.magnitude < 1f)
         {
             walkPointSet = false;
@@ -136,6 +173,7 @@ public class EnemyAi : MonoBehaviour
 
         walkPoint = new Vector3(transform.position.x + randomX, transform.position.y);
 
+        //sets walk point with the random range it obtained
         if(Physics.Raycast(walkPoint, -transform.up, 2f, whatIsGround))
         {
             walkPointSet = true;
@@ -143,28 +181,36 @@ public class EnemyAi : MonoBehaviour
 
     }
 
-    private void Flip()
+    private void flipEnemy()
     {
-        Vector3 currentScale = gameObject.transform.localScale;
-        currentScale.x *= -1;
-        gameObject.transform.localScale = currentScale;
+        Vector3 currentScale = agent.transform.localScale;
 
-        facingRight = !facingRight;
+        currentScale.x *= -1;
+
+        agent.transform.localScale = currentScale;
+    }
+    private IEnumerator setLastPosition()
+    {
+        
+        yield return new WaitForSeconds(1);
+        _lastPosition = agent.transform.position;
+        settinglast = false;
     }
 
     private void ChasePlayer()
     {
+        //Chases the player as long as it is in range
         agent.SetDestination(player.position);
     }
 
     public void AttackPlayer()
     {
-       
-
+        //Moves towards the player to perform a attack
         agent.SetDestination(transform.position);
 
-        transform.LookAt(player);
+        //transform.LookAt(player);
 
+        //resets the enemys attack
         if (!alreadyAttacked)
         {
             alreadyAttacked = true;
@@ -174,21 +220,25 @@ public class EnemyAi : MonoBehaviour
 
     public void RangeAttack()
     {
+        //Moves towards the player to perform a range attack
         agent.SetDestination(transform.position);
 
         transform.LookAt(player);
 
+        //Instanitates the projectile
         if (Time.time > nextshotTime)
         {
             Instantiate(projectile, transform.position, Quaternion.identity);
             nextshotTime = Time.time + timeBetweenShots;
         }
 
+        //Moves in range attack range and moves backworsd when the player apporchs
         if (playerInRangeAttack == true)
         {
             transform.position = Vector3.MoveTowards(transform.position, player.position, -speed * Time.deltaTime);
         }
 
+        //resets the enemys attack
         if (!alreadyAttacked)
         {
             alreadyAttacked = true;
@@ -198,11 +248,13 @@ public class EnemyAi : MonoBehaviour
 
     private void ResetAttack()
     {
+        //Resets atack after the enemy attacks it it dsont attack contintly
         alreadyAttacked = false;
     }
 
     public void Death()
     {
+        //Kills the emeny when health reachs zero
         Destroy(gameObject);
     }
 

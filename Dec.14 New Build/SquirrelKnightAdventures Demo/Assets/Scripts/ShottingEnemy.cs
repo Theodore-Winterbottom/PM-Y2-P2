@@ -4,14 +4,17 @@ using UnityEngine;
 
 public class ShottingEnemy : MonoBehaviour
 {
-    public float speed;
-    public Transform target;
-    public float minimumDistance;
+    [Header("Shooting Enemey Script")]
 
-    public GameObject projectile;
-    public float timeBetweenShots;
-    private float nextshotTime;
-    public EnemyAi enemyAi;
+    [Range(0,1)]
+    [SerializeField] private float speed;
+    [SerializeField] private Transform target;
+    [SerializeField] private float minimumDistance;
+
+    [SerializeField] private GameObject projectile;
+    [SerializeField] private float timeBetweenShots;
+    [SerializeField] private float nextshotTime;
+    [SerializeField] private EnemyAi enemyAi;
 
     private void Update()
     {
