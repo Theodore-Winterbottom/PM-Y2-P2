@@ -122,7 +122,7 @@ public class EnemyAi : MonoBehaviour
         {
             if(moveDirection.x < 0)
             {
-                Debug.Log("Facing Right");
+                
                 moveDirectionF = Mathf.Sign(moveDirection.x);
                 LastPositionF = Mathf.Sign(_lastPosition.x);
                 lastpoint = _lastPosition;
@@ -130,7 +130,6 @@ public class EnemyAi : MonoBehaviour
             }
             else
             {
-                Debug.Log("Facing Left");
                 moveDirectionF = Mathf.Sign(moveDirection.x);
                 LastPositionF = Mathf.Sign(_lastPosition.x);
                 lastpoint = _lastPosition;
