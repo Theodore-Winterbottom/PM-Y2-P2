@@ -1,11 +1,13 @@
 using UnityEngine;
 using TMPro;
+using System.Net.NetworkInformation;
 
 public class Stats : MonoBehaviour
 {
     private float timerDuration = 1f * 60f;
 
     private float timer;
+    
 
     [SerializeField]
     private TextMeshProUGUI firstMinute;
@@ -21,7 +23,7 @@ public class Stats : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        ResetTimer();
+
     }
 
     // Update is called once per frame
@@ -33,15 +35,7 @@ public class Stats : MonoBehaviour
             timer += Time.deltaTime;
             UpdateTimerDisplay(timer);
         }
-        /*else
-        {
-            Flash();
-        }*/
-    }
-
-    private void ResetTimer()
-    {
-        timer = timerDuration;
+      
     }
 
     private void UpdateTimerDisplay(float time)
@@ -56,8 +50,5 @@ public class Stats : MonoBehaviour
         secondSecond.text = currentTime[3].ToString();
     }
 
-    private void Flash()
-    {
-
-    }
+    
 }
