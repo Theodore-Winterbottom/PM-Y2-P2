@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.1727684, g: 0.21589243, b: 0.29782617, a: 1}
+  m_IndirectSpecularColor: {r: 0.17276841, g: 0.21589248, b: 0.2978262, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -235,18 +235,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target_object: {fileID: 55790088}
-  playerSpeedMultiplier: 20
-  jumpForceMultiplier: 10
+  playerSpeedMultiplier: 5
+  jumpForceMultiplier: 8
   layermask:
     serializedVersion: 2
     m_Bits: 2147483647
   groundBoxRadiusOffset: {x: -0.01, y: -0.01, z: -0.01}
-  obsicalBoxRadiusOffset: {x: 0, y: 0, z: 0}
+  obsicalBoxRadiusOffset: {x: -0.99, y: -0.01, z: -0.01}
   wallOffset_Value: 0.05
   show_obsical_hit: 0
-  show_ground_hit: 1
+  show_ground_hit: 0
   show_obsical_visual: 0
   show_ground_visual: 0
+  show_mesh: 0
 --- !u!54 &55790088
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1178,7 +1179,7 @@ MonoBehaviour:
   target_object: {fileID: 55790086}
   distance_from_camera_cutoff: 10
   distance_from_camera: 0
-  camera_speed_multiplier: 1.5
+  camera_speed_multiplier: 1
   distance_from_center_cutoff: 0.5
 --- !u!1 &335352927
 GameObject:

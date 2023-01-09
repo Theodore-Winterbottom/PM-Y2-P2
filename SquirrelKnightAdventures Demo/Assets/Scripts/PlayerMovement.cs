@@ -43,6 +43,9 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField]
     private bool show_ground_visual;
 
+    [SerializeField]
+    private bool show_mesh;
+
     private Vector3 wallOffset;
 
     private RaycastHit hit_ground;
@@ -101,7 +104,7 @@ public class PlayerMovement : MonoBehaviour
 
         RaycastHit hit;
         bool obstacleCheck = Physics.BoxCast(center, obsicalBoxRadiusOffset + transform.lossyScale /2, moveDirection, out hit, transform.rotation,
-            1, layermask, QueryTriggerInteraction.UseGlobal);
+            1f, layermask, QueryTriggerInteraction.UseGlobal);
 
         if (obstacleCheck)
         {
@@ -124,14 +127,41 @@ public class PlayerMovement : MonoBehaviour
     {
         if (show_ground_visual)
         {
-            target_object.GetComponent<MeshRenderer>().enabled = false;
+            if (show_mesh)
+            {
+                target_object.GetComponent<MeshRenderer>().enabled = true;
+            } else
+            {
+                target_object.GetComponent<MeshRenderer>().enabled = false;
+            }
+
+            Gizmos.color = Color.green;
+
+            Gizmos.DrawCube(target_object.position + wallOffset, 
+                groundBoxRadiusOffset + target_object.transform.lossyScale); 
+        } 
+        else
+        {
+            target_object.GetComponent<MeshRenderer>().enabled = true;
+        }
+
+        if (show_obsical_visual)
+        {
+            if (show_mesh)
+            {
+                target_object.GetComponent<MeshRenderer>().enabled = true;
+            }
+            else
+            {
+                target_object.GetComponent<MeshRenderer>().enabled = false;
+            }
 
             Gizmos.color = Color.blue;
 
-            Gizmos.DrawWireCube(target_object.position + wallOffset, 
-                groundBoxRadiusOffset + target_object.transform.lossyScale); 
-
-        } else
+            Gizmos.DrawCube(target_object.position,
+                obsicalBoxRadiusOffset + target_object.transform.lossyScale + new Vector3(2, 0, 0));
+        }
+        else
         {
             target_object.GetComponent<MeshRenderer>().enabled = true;
         }
