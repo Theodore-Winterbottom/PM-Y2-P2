@@ -29,6 +29,9 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField]
     private float wallOffset_Value;
 
+    [SerializeField] 
+    private bool facingLeft;
+
     //Debugging
 
     [SerializeField]
@@ -52,21 +55,29 @@ public class PlayerMovement : MonoBehaviour
     
     private void FixedUpdate()
     {
-        CalculateMovement();
+        float horizontalInput = Input.GetAxis("Horizontal");
 
-        if (CheckIsGrounded() && Input.GetKey(KeyCode.Space))
+        if (horizontalInput > 0 && facingLeft)
         {
-            CalculateJump();
+            Flip();
         }
+
+        if (horizontalInput < 0 && !facingLeft)
+        {
+            Flip();
+        }
+
+        CalculateMovement();
     }
 
     public bool CheckIsGrounded()
     {
         Vector3 center = target_object.GetComponent<Collider>().bounds.center;
-
+        float horizontalInput = Input.GetAxis("Horizontal");
+        Vector3 direction = new Vector3(horizontalInput, 0, 0);
         RaycastHit hit_ground;
         bool groundCheck = Physics.BoxCast(center + wallOffset, groundBoxRadiusOffset + target_object.transform.lossyScale / 2,
-            -target_object.transform.up, out hit_ground, target_object.transform.rotation, 0.01f, layermask, QueryTriggerInteraction.UseGlobal);
+            direction, out hit_ground, target_object.transform.rotation, 0.01f, layermask, QueryTriggerInteraction.UseGlobal);
 
         if (groundCheck)
         {
@@ -75,8 +86,8 @@ public class PlayerMovement : MonoBehaviour
 
         if (show_ground_hit)
         {
-            Debug.Log(groundCheck)
-;       }
+            Debug.Log(groundCheck);
+        }
 
         return groundCheck;
     }
@@ -86,13 +97,25 @@ public class PlayerMovement : MonoBehaviour
         float horizontalInput = Input.GetAxis("Horizontal");
 
         Vector3 direction = new (horizontalInput, 0, 0);
-
+        
         if (!CheckIfObstacles(direction))
         {
             transform.Translate(direction * playerSpeedMultiplier * Time.deltaTime);
         }
-    }
+        if (CheckIsGrounded() && Input.GetKey(KeyCode.Space))
+        {
+            CalculateJump();
+        }
 
+    }
+    private void Flip()
+    {
+        Vector3 currentRotation = gameObject.transform.localScale;
+        Vector3 newRotation = new Vector3(currentRotation.x * -1, currentRotation.y, currentRotation.z);
+        gameObject.transform.localScale = newRotation;
+
+        facingLeft = !facingLeft;
+    }
     public bool CheckIfObstacles(Vector3 moveDirection)
     {
         wallOffset = Vector3.zero;
@@ -103,7 +126,7 @@ public class PlayerMovement : MonoBehaviour
         Vector3 center = GetComponent<Collider>().bounds.center;
 
         RaycastHit hit;
-        bool obstacleCheck = Physics.BoxCast(center, obsicalBoxRadiusOffset + transform.lossyScale /2, moveDirection, out hit, transform.rotation,
+        bool obstacleCheck = Physics.BoxCast(center, obsicalBoxRadiusOffset + target_object.transform.lossyScale / 2, moveDirection, out hit, transform.rotation,
             1f, layermask, QueryTriggerInteraction.UseGlobal);
 
         if (obstacleCheck)
