@@ -1,11 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.PackageManager;
 using UnityEngine;
 
 public class Sword : MonoBehaviour
 {
     public Animator anim;
     public EnemyAi enemyAi;
+    public Boss boss;
 
     // Start is called before the first frame update
     void Start()
@@ -34,6 +36,11 @@ public class Sword : MonoBehaviour
         if(other.tag == "Enemy" && anim.GetBool("attacking"))
         {
             enemyAi.Death();
+        }
+
+        if (other.tag == "Boss" && anim.GetBool("attacking"))
+        {
+            boss.TakeDamage(20);
         }
     }
 
