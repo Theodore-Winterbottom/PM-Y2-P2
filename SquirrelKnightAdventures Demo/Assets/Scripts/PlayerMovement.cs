@@ -1,9 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
-using UnityEditor;
 using UnityEngine;
-using static UnityEngine.RuleTile.TilingRuleOutput;
 
 #region Main Script
 public class PlayerMovement : MonoBehaviour
@@ -49,11 +44,19 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField]
     private bool show_mesh;
 
-    private Vector3 wallOffset;
+    [SerializeField]
+    private float maxDistance_ground_check;
 
-    private RaycastHit hit_ground;
+    [SerializeField]
+    private float maxDistance_obstical_check;
+
+    private Vector3 wallOffset;
     
     private void FixedUpdate()
+    {
+        CalculateMovement();
+    }
+    private void CalculateMovement()
     {
         float horizontalInput = Input.GetAxis("Horizontal");
 
@@ -67,17 +70,27 @@ public class PlayerMovement : MonoBehaviour
             Flip();
         }
 
-        CalculateMovement();
-    }
+        if (CheckIsGrounded() && Input.GetKey(KeyCode.Space))
+        {
+            target_object.AddForce(Vector3.up * jumpForceMultiplier, ForceMode.Impulse);
+        }
 
+        Vector3 direction = new (horizontalInput, 0, 0);
+        
+        if (!CheckIfObstacles(direction))
+        {
+            transform.Translate(direction * playerSpeedMultiplier * Time.deltaTime);
+        }
+    }
     public bool CheckIsGrounded()
     {
         Vector3 center = target_object.GetComponent<Collider>().bounds.center;
+
         float horizontalInput = Input.GetAxis("Horizontal");
-        Vector3 direction = new Vector3(horizontalInput, 0, 0);
+
         RaycastHit hit_ground;
         bool groundCheck = Physics.BoxCast(center + wallOffset, groundBoxRadiusOffset + target_object.transform.lossyScale / 2,
-            direction, out hit_ground, target_object.transform.rotation, 0.01f, layermask, QueryTriggerInteraction.UseGlobal);
+            Vector3.down, out hit_ground, target_object.transform.rotation, maxDistance_ground_check, layermask, QueryTriggerInteraction.UseGlobal);
 
         if (groundCheck)
         {
@@ -91,27 +104,12 @@ public class PlayerMovement : MonoBehaviour
 
         return groundCheck;
     }
-
-    private void CalculateMovement()
-    {
-        float horizontalInput = Input.GetAxis("Horizontal");
-
-        Vector3 direction = new (horizontalInput, 0, 0);
-        
-        if (!CheckIfObstacles(direction))
-        {
-            transform.Translate(direction * playerSpeedMultiplier * Time.deltaTime);
-        }
-        if (CheckIsGrounded() && Input.GetKey(KeyCode.Space))
-        {
-            CalculateJump();
-        }
-
-    }
     private void Flip()
     {
         Vector3 currentRotation = gameObject.transform.localScale;
+
         Vector3 newRotation = new Vector3(currentRotation.x * -1, currentRotation.y, currentRotation.z);
+
         gameObject.transform.localScale = newRotation;
 
         facingLeft = !facingLeft;
@@ -125,9 +123,9 @@ public class PlayerMovement : MonoBehaviour
 
         Vector3 center = GetComponent<Collider>().bounds.center;
 
-        RaycastHit hit;
-        bool obstacleCheck = Physics.BoxCast(center, obsicalBoxRadiusOffset + target_object.transform.lossyScale / 2, moveDirection, out hit, transform.rotation,
-            1f, layermask, QueryTriggerInteraction.UseGlobal);
+        RaycastHit hit_obstical;
+        bool obstacleCheck = Physics.BoxCast(center, obsicalBoxRadiusOffset + target_object.transform.lossyScale / 2, moveDirection, out hit_obstical, 
+            transform.rotation, maxDistance_obstical_check, layermask, QueryTriggerInteraction.UseGlobal);
 
         if (obstacleCheck)
         {
@@ -142,10 +140,6 @@ public class PlayerMovement : MonoBehaviour
         return obstacleCheck;
     }
 
-    private void CalculateJump()
-    {
-        target_object.AddForce(Vector3.up * jumpForceMultiplier, ForceMode.Impulse);
-    }
     private void OnDrawGizmos()
     {
         if (show_ground_visual)
@@ -163,10 +157,6 @@ public class PlayerMovement : MonoBehaviour
             Gizmos.DrawCube(target_object.position + wallOffset, 
                 groundBoxRadiusOffset + target_object.transform.lossyScale); 
         } 
-        else
-        {
-            target_object.GetComponent<MeshRenderer>().enabled = true;
-        }
 
         if (show_obsical_visual)
         {
@@ -183,10 +173,6 @@ public class PlayerMovement : MonoBehaviour
 
             Gizmos.DrawCube(target_object.position,
                 obsicalBoxRadiusOffset + target_object.transform.lossyScale + new Vector3(2, 0, 0));
-        }
-        else
-        {
-            target_object.GetComponent<MeshRenderer>().enabled = true;
         }
     }
 }
