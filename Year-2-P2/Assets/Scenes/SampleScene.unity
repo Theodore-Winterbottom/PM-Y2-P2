@@ -952,47 +952,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 670e4220a7d8a244aa22d6695109b5a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Strength:
-    BaseValue: 0
-    isDirty: 1
-    _Value: 0
-    lastBaseValue: -3.4028235e+38
-  EnemiesKilled:
-    BaseValue: 0
-    isDirty: 1
-    _Value: 0
-    lastBaseValue: -3.4028235e+38
-  DistanceTravialed:
-    BaseValue: 0
-    isDirty: 1
-    _Value: 0
-    lastBaseValue: -3.4028235e+38
-  DamageDelt:
-    BaseValue: 0
-    isDirty: 1
-    _Value: 0
-    lastBaseValue: -3.4028235e+38
-  DamageTaken:
-    BaseValue: 0
-    isDirty: 1
-    _Value: 0
-    lastBaseValue: -3.4028235e+38
-  Deaths:
-    BaseValue: 0
-    isDirty: 1
-    _Value: 0
-    lastBaseValue: -3.4028235e+38
-  ItemCollected:
-    BaseValue: 0
-    isDirty: 1
-    _Value: 0
-    lastBaseValue: -3.4028235e+38
-  Armor:
-    BaseValue: 0
-    isDirty: 1
-    _Value: 0
-    lastBaseValue: -3.4028235e+38
-  stats: 0
 --- !u!1 &472783712
 GameObject:
   m_ObjectHideFlags: 0
@@ -2337,6 +2296,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf2a7150708c5d4489b4acaff2c418ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  countDown: 1
   firstMinute: {fileID: 217199542}
   secondMinute: {fileID: 108591789}
   separator: {fileID: 1896579207}
