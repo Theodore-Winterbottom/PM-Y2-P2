@@ -2296,7 +2296,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf2a7150708c5d4489b4acaff2c418ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  countDown: 1
+  countUp: 1
   firstMinute: {fileID: 217199542}
   secondMinute: {fileID: 108591789}
   separator: {fileID: 1896579207}
