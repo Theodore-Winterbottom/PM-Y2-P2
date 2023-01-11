@@ -21,7 +21,7 @@ public class Projectile : MonoBehaviour
 
         if(transform.position == targetPosition)
         {
-            //healthScript.TakeDamage(healthScript.damageAmount);
+            
             Destroy(gameObject);
         }
     }
