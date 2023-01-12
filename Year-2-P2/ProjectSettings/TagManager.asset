@@ -8,6 +8,8 @@ TagManager:
   - HealthBar
   - Ground
   - Enemy
+  - Deaths
+  - Kills
   layers:
   - Default
   - TransparentFX

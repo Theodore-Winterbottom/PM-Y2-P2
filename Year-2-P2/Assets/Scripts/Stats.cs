@@ -41,6 +41,7 @@ public class Stats : MonoBehaviour
     }
     private void ResetTimer()
     {
+        // If timer is equal to 0, count up
         if(countUp)
         {
             timer = timerDuration;

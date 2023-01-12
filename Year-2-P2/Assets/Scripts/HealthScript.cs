@@ -37,6 +37,8 @@ public class HealthScript : MonoBehaviour
         {
             // If the object's health is zero or less, destroy it
             Destroy(gameObject);
+
+            //GameplayController.instance.RestartGame();
         }
     }
 
