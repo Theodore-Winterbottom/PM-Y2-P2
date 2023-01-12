@@ -1,39 +1,34 @@
 using System.Collections;
-using System.Collections.Generic;
+using UnityEditor;
+using UnityEditorInternal;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.EventSystems;
-
+#region Main Script
 public class EnemyAi : MonoBehaviour
 {
+    #region Variables
 
-    [Header("Objects attach to player")]
+    [SerializeField] private bool enemyType;
 
-    [SerializeField] private NavMeshAgent agent;
-
-    [SerializeField] private Transform player;
-
-    [SerializeField] private LayerMask whatIsGround, whatIsPlayer;
-
-    [SerializeField] private GameObject projectile;
-
-    [SerializeField] private Animator anim;
-
-    [SerializeField] private Rigidbody rb;
-
-    [Header("Patroling")]
+    [SerializeField] private NavMeshAgent nav_agent;
 
     [SerializeField] private Vector3 walkPoint;
 
-    [SerializeField] public bool walkPointSet;
+    [SerializeField] private Transform target_object;
+
+    [SerializeField] private LayerMask player_layermask;
+
+    [SerializeField] private LayerMask ground_layermask;
+
+    [SerializeField] private GameObject projectile_prefab;
+
+    [SerializeField] private Animator attack_animation;
 
     [SerializeField] private float walkPointRange;
 
     [SerializeField] private Vector3 _lastPosition;
 
     [SerializeField] private float velocity;
-
-    [Header("Attacking")]
 
     [SerializeField] private float timeBetweenAttacks;
 
@@ -43,36 +38,38 @@ public class EnemyAi : MonoBehaviour
 
     [SerializeField] private bool alreadyAttacked;
 
-    [Header("States")]
-
     [SerializeField] private float sightRange, attackRange, rangeAttack;
     
     [SerializeField] public bool playerInSightRange, playerInAttackRange, playerInRangeAttack;
 
     [SerializeField] private float speed;
-    public Vector3 lastpoint;
-    public Vector3 currentPosition;
-    public bool settinglast;
-    public float moveDirectionF;
-    public float LastPositionF;
-    public Vector3 moveDirection;
-    private void Awake()
+    
+    [SerializeField] private Vector3 lastpoint;
+    [SerializeField] private Vector3 currentPosition;
+    [SerializeField] private bool settinglast;
+    [SerializeField] private float moveDirectionF;
+    [SerializeField] private float LastPositionF;
+    [SerializeField] private Vector3 moveDirection;
+    [SerializeField] private bool walkPointSet;
+    #endregion
+    #region Script
+    [SerializeField]private void Awake()
     {
+        nav_agent = GetComponent<NavMeshAgent>();
         //Finds enemys NavMeshAgent, Transform and lastpositon when the game starts
-        _lastPosition = agent.transform.position;
-        player = GameObject.Find("Player").transform;
-        agent = GetComponent<NavMeshAgent>();
+        _lastPosition = nav_agent.transform.position;
         
     }
     private void Update()
     {
+        
         if (!settinglast)
         {
             settinglast = true;
             StartCoroutine(setLastPosition());
         }
         
-        currentPosition = agent.transform.position;
+        currentPosition = nav_agent.transform.position;
     }
     private void FixedUpdate()
     {
@@ -80,9 +77,9 @@ public class EnemyAi : MonoBehaviour
 
         
 
-        playerInSightRange = Physics.CheckSphere(transform.position, sightRange, whatIsPlayer);
-        playerInAttackRange = Physics.CheckSphere(transform.position, attackRange, whatIsPlayer);
-        playerInRangeAttack = Physics.CheckSphere(transform.position, rangeAttack, whatIsPlayer);
+        playerInSightRange = Physics.CheckSphere(transform.position, sightRange, player_layermask);
+        playerInAttackRange = Physics.CheckSphere(transform.position, attackRange, player_layermask);
+        playerInRangeAttack = Physics.CheckSphere(transform.position, rangeAttack, player_layermask);
 
         //Patroling the area if not attacking or chaseing the player
         if (!playerInSightRange && !playerInAttackRange)
@@ -100,11 +97,11 @@ public class EnemyAi : MonoBehaviour
         if (playerInSightRange && playerInAttackRange)
         {
             AttackPlayer();
-            anim.SetBool("enemyAttacking", true);
+            attack_animation.SetBool("enemyAttacking", true);
         }
         else if (!playerInAttackRange)
         {
-            anim.SetBool("enemyAttacking", false);
+            attack_animation.SetBool("enemyAttacking", false);
         }
 
         //Attacks with range attack if in range
@@ -114,30 +111,21 @@ public class EnemyAi : MonoBehaviour
         }
 
 
-        float playerdistance = (transform.position - player.position).magnitude;
+        float playerdistance = (transform.position - target_object.position).magnitude;
 
         moveDirection = currentPosition - _lastPosition;
         
-        if (Mathf.Sign(moveDirection.x) == agent.transform.localScale.x && playerdistance != 1f)
+        if (Mathf.Sign(moveDirection.x) == nav_agent.transform.localScale.x && playerdistance != 1f)
         {
-            if(moveDirection.x < 0)
-            {
-                
-                moveDirectionF = Mathf.Sign(moveDirection.x);
-                LastPositionF = Mathf.Sign(_lastPosition.x);
-                lastpoint = _lastPosition;
-                flipEnemy();
-            }
-            else
-            {
-                moveDirectionF = Mathf.Sign(moveDirection.x);
-                LastPositionF = Mathf.Sign(_lastPosition.x);
-                lastpoint = _lastPosition;
-                flipEnemy();
-            }
+            flipEnemy();
         }
     }
-
+    private void ChasePlayer()
+    {
+        Debug.Log("chasing");
+        //Chases the player as long as it is in range
+        nav_agent.SetDestination(target_object.position);
+    }
     private void Patroling()
     {
         //If no walkpoint finds walk point
@@ -147,20 +135,18 @@ public class EnemyAi : MonoBehaviour
         }
 
         //moves to the walkpoint
-        if(walkPointSet)
+        if (walkPointSet)
         {
-            agent.SetDestination(walkPoint);
+            nav_agent.SetDestination(walkPoint);
         }
 
         Vector3 distanceToWalkPoint = transform.position - walkPoint;
 
         //Walkpoint reached
-        if(distanceToWalkPoint.magnitude < 1f)
+        if (distanceToWalkPoint.magnitude < 1f)
         {
             walkPointSet = false;
         }
-
-        
     }
 
     private void SearchWalkPoint()
@@ -173,39 +159,35 @@ public class EnemyAi : MonoBehaviour
         walkPoint = new Vector3(transform.position.x + randomX, transform.position.y);
 
         //sets walk point with the random range it obtained
-        if(Physics.Raycast(walkPoint, -transform.up, 2f, whatIsGround))
+        if (Physics.Raycast(walkPoint, -transform.up, 2f, ground_layermask))
         {
             walkPointSet = true;
         }
-
     }
 
     private void flipEnemy()
     {
-        Vector3 currentScale = agent.transform.localScale;
+        Debug.Log("flipped");
+        Vector3 currentScale = nav_agent.transform.localScale;
 
         currentScale.x *= -1;
 
-        agent.transform.localScale = currentScale;
+        nav_agent.transform.localScale = currentScale;
     }
     private IEnumerator setLastPosition()
     {
         
         yield return new WaitForSeconds(1);
-        _lastPosition = agent.transform.position;
+        _lastPosition = nav_agent.transform.position;
         settinglast = false;
     }
 
-    private void ChasePlayer()
-    {
-        //Chases the player as long as it is in range
-        agent.SetDestination(player.position);
-    }
+    
 
     public void AttackPlayer()
     {
         //Moves towards the player to perform a attack
-        agent.SetDestination(transform.position);
+        nav_agent.SetDestination(transform.position);
 
         //transform.LookAt(player);
 
@@ -220,21 +202,21 @@ public class EnemyAi : MonoBehaviour
     public void RangeAttack()
     {
         //Moves towards the player to perform a range attack
-        agent.SetDestination(transform.position);
+        nav_agent.SetDestination(transform.position);
 
-        transform.LookAt(player);
+        transform.LookAt(target_object);
 
         //Instanitates the projectile
         if (Time.time > nextshotTime)
         {
-            Instantiate(projectile, transform.position, Quaternion.identity);
+            Instantiate(projectile_prefab, transform.position, Quaternion.identity);
             nextshotTime = Time.time + timeBetweenShots;
         }
 
         //Moves in range attack range and moves backworsd when the player apporchs
         if (playerInRangeAttack == true)
         {
-            transform.position = Vector3.MoveTowards(transform.position, player.position, -speed * Time.deltaTime);
+            transform.position = Vector3.MoveTowards(transform.position, target_object.position, -speed * Time.deltaTime);
         }
 
         //resets the enemys attack
@@ -256,5 +238,140 @@ public class EnemyAi : MonoBehaviour
         //Kills the emeny when health reachs zero
         Destroy(gameObject);
     }
-
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireSphere(transform.position, sightRange);
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, attackRange);
+        Gizmos.color = Color.blue;
+        Gizmos.DrawWireSphere(transform.position, rangeAttack);
+    }
 }
+#endregion
+#endregion
+
+#region Editor Region
+[CustomEditor(typeof(EnemyAi))]
+public class EnemyEditor : Editor
+{
+    public enum DisplayCategory
+    {
+        Melee_Enemy, Ranged_Enemy, Boss_Enemy, Flying_Enemy
+    }
+
+    public DisplayCategory categoryToDisplay;
+
+    SerializedProperty enemyType;
+    SerializedProperty target_object;
+    SerializedProperty nav_agent;
+
+    SerializedProperty ground_layermask;
+    SerializedProperty player_layermask;
+
+    SerializedProperty projectile;
+
+    SerializedProperty anim;
+    SerializedProperty rb;
+    SerializedProperty walkPoint;
+    void OnEnable()
+    {
+        enemyType = serializedObject.FindProperty("enemyType");
+        target_object = serializedObject.FindProperty("target_object");
+        nav_agent = serializedObject.FindProperty("nav_agent");
+        ground_layermask = serializedObject.FindProperty("ground_layermask");
+        player_layermask = serializedObject.FindProperty("player_layermask");
+        enemyType = serializedObject.FindProperty("enemyType");
+
+    }
+    public override void OnInspectorGUI()
+    {
+        serializedObject.Update();
+
+        EditorGUILayout.Space(5f);
+        EditorGUILayout.LabelField("Enemy AI Script", EditorStyles.boldLabel);
+        EditorGUI.indentLevel = 0;
+
+        EditorGUILayout.Space(5f);
+        categoryToDisplay = (DisplayCategory)EditorGUILayout.EnumPopup("Enemy Picker", categoryToDisplay);
+        EditorGUI.indentLevel = 0;
+
+        switch (categoryToDisplay)
+        {
+            case DisplayCategory.Melee_Enemy:
+                DisplayMeleeEnemyStats();
+                break;
+
+            case DisplayCategory.Ranged_Enemy:
+                DisplayRangedEnemyStats();
+                break;
+
+            case DisplayCategory.Boss_Enemy:
+                DisplayBossEnemyStats();
+                break;
+
+            case DisplayCategory.Flying_Enemy:
+                DisplayFlyingEnemyStats();
+                break;
+        }
+
+        DisplayBasicStats();
+
+        serializedObject.ApplyModifiedProperties();
+    }
+    
+    void DisplayMeleeEnemyStats()
+    {
+        EditorGUILayout.Space(5f);
+        EditorGUILayout.LabelField("Melee Enemey Type", EditorStyles.boldLabel);
+        EditorGUI.indentLevel = 0;
+
+        
+    }
+    void DisplayRangedEnemyStats()
+    {
+        EditorGUILayout.Space(5f);
+        EditorGUILayout.LabelField("Ranged Enemey Type", EditorStyles.boldLabel);
+        EditorGUI.indentLevel = 0;
+    }
+    void DisplayBossEnemyStats()
+    {
+        EditorGUILayout.Space(5f);
+        EditorGUILayout.LabelField("Boss Eemey Type", EditorStyles.boldLabel);
+        EditorGUI.indentLevel = 0;
+    }
+    void DisplayFlyingEnemyStats()
+    {
+        EditorGUILayout.Space(5f);
+        EditorGUILayout.LabelField("Flying Eemey Type", EditorStyles.boldLabel);
+        EditorGUI.indentLevel = 0;
+    }
+
+    void DisplayBasicStats()
+    {
+        EditorGUILayout.Space(5f);
+        EditorGUILayout.LabelField("Basic Stats", EditorStyles.boldLabel);
+        EditorGUI.indentLevel = 1;
+
+        EditorGUILayout.Space(2f);
+        EditorGUILayout.LabelField("Object Declaration");
+        EditorGUI.indentLevel = 1;
+
+        EditorGUILayout.Space(5f);
+        EditorGUILayout.ObjectField(target_object, GUIContent.none);
+        EditorGUI.indentLevel = 1;
+
+        EditorGUILayout.Space(1f);
+        EditorGUILayout.ObjectField(nav_agent, GUIContent.none);
+        EditorGUI.indentLevel = 1;
+
+        EditorGUILayout.Space(1f);
+        ground_layermask.intValue = EditorGUILayout.LayerField("Layer for Objects:", 100);
+        EditorGUI.indentLevel = 1;
+
+        EditorGUILayout.Space(1f);
+        //EditorGUILayout.LayerField("Layer for Objects:", 100);
+        EditorGUI.indentLevel = 1;
+    }
+}
+#endregion

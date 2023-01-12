@@ -111,7 +111,7 @@ public class PlayerMovement : MonoBehaviour
         Vector3 newRotation = new Vector3(currentRotation.x * -1, currentRotation.y, currentRotation.z);
 
         gameObject.transform.localScale = newRotation;
-
+        
         facingLeft = !facingLeft;
     }
     public bool CheckIfObstacles(Vector3 moveDirection)
