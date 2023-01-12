@@ -35,7 +35,7 @@ public class Sword : MonoBehaviour
     {
         if(other.tag == "Enemy" && anim.GetBool("attacking"))
         {
-            enemyAi.Death();
+            enemyAi.TakeDamage(25);
         }
 
         if (other.tag == "Boss" && anim.GetBool("attacking"))

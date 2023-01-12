@@ -492,7 +492,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 139594167}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.2}
+  m_LocalPosition: {x: 0, y: 0, z: -0.04}
   m_LocalScale: {x: 2.3811212, y: 2.3811212, z: 2.3811212}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -521,6 +521,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 128
   anim: {fileID: 190369753}
+  healthScript: {fileID: 0}
   rb: {fileID: 139594168}
   timeBetweenAttacks: 1
   health: 500
@@ -534,7 +535,7 @@ MonoBehaviour:
   alreadyAttacked: 0
   isInvulnerable: 0
   sightRange: 10
-  attackRange: 4
+  attackRange: 3
   rangeAttack: 0
   playerInSightRange: 0
   playerInAttackRange: 0
@@ -835,7 +836,7 @@ GameObject:
   - component: {fileID: 237123541}
   m_Layer: 0
   m_Name: Cube
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -866,8 +867,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 2.9847817, y: 0.88177246, z: 8.2963085}
-  m_Center: {x: -1.4006137, y: -0.51546395, z: -0.12762463}
+  m_Size: {x: 2.9847817, y: 1.4813752, z: 8.2963085}
+  m_Center: {x: -1.400614, y: -0.8152652, z: -0.12762465}
 --- !u!23 &237123542
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -1460,6 +1461,25 @@ MonoBehaviour:
   m_ShadowLayerMask: 1
   m_LightCookieSize: {x: 1, y: 1}
   m_LightCookieOffset: {x: 0, y: 0}
+--- !u!1 &425400996 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1047343693273072889, guid: f5846f60c2e3c564183f653da632562a,
+    type: 3}
+  m_PrefabInstance: {fileID: 1047343693376998850}
+  m_PrefabAsset: {fileID: 0}
+--- !u!65 &425401001
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 425400996}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 5.4118595, y: 0.88177294, z: 8.296309}
+  m_Center: {x: -1.7001537, y: -0.5154635, z: -0.12762316}
 --- !u!1 &563773436
 GameObject:
   m_ObjectHideFlags: 0
@@ -1999,7 +2019,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &927876168
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2020,6 +2040,7 @@ MonoBehaviour:
   bulletParent: {fileID: 1957051356}
   fireRate: 1
   nextFireTime: 1
+  health: 0
 --- !u!135 &927876169
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -3090,7 +3111,7 @@ GameObject:
   - component: {fileID: 3866820755255086315}
   - component: {fileID: 4661147646382706745}
   - component: {fileID: 4661147646382706746}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3169,6 +3190,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1047343692479498667, guid: f5846f60c2e3c564183f653da632562a,
         type: 3}
+      propertyPath: health
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 1047343692479498667, guid: f5846f60c2e3c564183f653da632562a,
+        type: 3}
       propertyPath: player
       value: 
       objectReference: {fileID: 55790086}
@@ -3185,9 +3211,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1047343692479498667, guid: f5846f60c2e3c564183f653da632562a,
         type: 3}
+      propertyPath: attackRange
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1047343692479498667, guid: f5846f60c2e3c564183f653da632562a,
+        type: 3}
       propertyPath: rangeAttack
       value: 10
       objectReference: {fileID: 0}
+    - target: {fileID: 1047343692479498667, guid: f5846f60c2e3c564183f653da632562a,
+        type: 3}
+      propertyPath: healthScript
+      value: 
+      objectReference: {fileID: 55790089}
     - target: {fileID: 1047343692479498669, guid: f5846f60c2e3c564183f653da632562a,
         type: 3}
       propertyPath: m_RootOrder
@@ -3243,8 +3279,39 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1047343692486086411, guid: f5846f60c2e3c564183f653da632562a,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: -0.045738015
+      objectReference: {fileID: 0}
+    - target: {fileID: 1047343692486086411, guid: f5846f60c2e3c564183f653da632562a,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0.7056249
+      objectReference: {fileID: 0}
+    - target: {fileID: 1047343692486086411, guid: f5846f60c2e3c564183f653da632562a,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.0457385
+      objectReference: {fileID: 0}
+    - target: {fileID: 1047343692486086411, guid: f5846f60c2e3c564183f653da632562a,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0.7056271
+      objectReference: {fileID: 0}
+    - target: {fileID: 1047343692486086411, guid: f5846f60c2e3c564183f653da632562a,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: -2887.417
+      objectReference: {fileID: 0}
+    - target: {fileID: 1047343693273072889, guid: f5846f60c2e3c564183f653da632562a,
+        type: 3}
+      propertyPath: m_TagString
+      value: Enemy
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 1047343692479498664, guid: f5846f60c2e3c564183f653da632562a, type: 3}
+    - {fileID: 1047343693273072895, guid: f5846f60c2e3c564183f653da632562a, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: f5846f60c2e3c564183f653da632562a, type: 3}
 --- !u!23 &3866820755255086315
 MeshRenderer:
@@ -3326,8 +3393,8 @@ MonoBehaviour:
   anim: {fileID: 946686194868714961}
   enemyAi: {fileID: 1250411625}
   boss: {fileID: 139594173}
---- !u!64 &4661147646382706746
-MeshCollider:
+--- !u!65 &4661147646382706746
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -3336,10 +3403,9 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 1
   m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 1
-  m_CookingOptions: 30
-  m_Mesh: {fileID: -5495902117074765545, guid: bf1ca904cee9c9849ab4a03d963100b8, type: 3}
+  serializedVersion: 2
+  m_Size: {x: 5.354445, y: 0.8817738, z: 6.1696186}
+  m_Center: {x: 1.2461848, y: -0.51546615, z: -1.9302807}
 --- !u!224 &4903409440115440244
 RectTransform:
   m_ObjectHideFlags: 0

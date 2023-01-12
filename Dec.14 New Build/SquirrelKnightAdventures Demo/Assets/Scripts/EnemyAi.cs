@@ -21,6 +21,11 @@ public class EnemyAi : MonoBehaviour
 
     [SerializeField] private Rigidbody rb;
 
+    [SerializeField] private HealthScript healthScript;
+
+    [SerializeField]
+    private int health;
+
     [Header("Patroling")]
 
     [SerializeField] private Vector3 walkPoint;
@@ -42,6 +47,8 @@ public class EnemyAi : MonoBehaviour
     [SerializeField] private float nextshotTime;
 
     [SerializeField] private bool alreadyAttacked;
+
+    [SerializeField] private bool shot;
 
     [Header("States")]
 
@@ -77,7 +84,6 @@ public class EnemyAi : MonoBehaviour
     private void FixedUpdate()
     {
         //Check for sight and attack range
-
         
 
         playerInSightRange = Physics.CheckSphere(transform.position, sightRange, whatIsPlayer);
@@ -127,6 +133,7 @@ public class EnemyAi : MonoBehaviour
                 LastPositionF = Mathf.Sign(_lastPosition.x);
                 lastpoint = _lastPosition;
                 flipEnemy();
+
             }
             else
             {
@@ -134,6 +141,7 @@ public class EnemyAi : MonoBehaviour
                 LastPositionF = Mathf.Sign(_lastPosition.x);
                 lastpoint = _lastPosition;
                 flipEnemy();
+                
             }
         }
     }
@@ -159,8 +167,6 @@ public class EnemyAi : MonoBehaviour
         {
             walkPointSet = false;
         }
-
-        
     }
 
     private void SearchWalkPoint()
@@ -227,6 +233,7 @@ public class EnemyAi : MonoBehaviour
         //Instanitates the projectile
         if (Time.time > nextshotTime)
         {
+            shot = true;
             Instantiate(projectile, transform.position, Quaternion.identity);
             nextshotTime = Time.time + timeBetweenShots;
         }
@@ -240,6 +247,7 @@ public class EnemyAi : MonoBehaviour
         //resets the enemys attack
         if (!alreadyAttacked)
         {
+            shot = false;
             alreadyAttacked = true;
             Invoke(nameof(ResetAttack), timeBetweenAttacks);
         }
@@ -255,6 +263,27 @@ public class EnemyAi : MonoBehaviour
     {
         //Kills the emeny when health reachs zero
         Destroy(gameObject);
+    }
+
+    public void TakeDamage(int damage)
+    {
+
+        health -= damage;
+
+        if (health <= 0)
+        {
+            Death();
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.tag == "Player" && anim.GetBool("enemyAttacking") || other.gameObject.tag == "Player" && shot)
+        {
+            healthScript.TakeDamage(20);
+        }
+
+
     }
 
     private void OnDrawGizmosSelected()

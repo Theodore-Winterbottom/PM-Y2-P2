@@ -21,6 +21,9 @@ public class Boss : MonoBehaviour
     private Animator anim;
 
     [SerializeField]
+    private HealthScript healthScript;
+
+    [SerializeField]
     private Rigidbody rb;
 
     [Header("Attacking")]
@@ -210,6 +213,14 @@ public class Boss : MonoBehaviour
     void Die()
     {
         Destroy(gameObject);
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.tag == "Player" && anim.GetBool("enemyAttacking"))
+        {
+            healthScript.TakeDamage(20);
+        }
     }
 
 }

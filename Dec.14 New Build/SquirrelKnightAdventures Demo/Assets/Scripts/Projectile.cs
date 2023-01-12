@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Projectile : MonoBehaviour
 {
-    Vector3 targetPosition;
+    public Vector3 targetPosition;
     public float speed;
     //public HealthScript healthScript;
 

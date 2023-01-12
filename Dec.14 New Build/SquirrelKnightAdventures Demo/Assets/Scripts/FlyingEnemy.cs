@@ -28,6 +28,9 @@ public class FlyingEnemy : MonoBehaviour
     [SerializeField]
     private float nextFireTime;
 
+    [SerializeField]
+    private int health;
+
     void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player").transform;
@@ -48,6 +51,23 @@ public class FlyingEnemy : MonoBehaviour
             nextFireTime = Time.time + fireRate;
         }
         
+    }
+
+    public void TakeDamage(int damage)
+    {
+
+        health -= damage;
+
+        if (health <= 0)
+        {
+            Death();
+        }
+    }
+
+    public void Death()
+    {
+        //Kills the emeny when health reachs zero
+        Destroy(gameObject);
     }
 
     private void OnDrawGizmosSelected()
