@@ -6,13 +6,13 @@ public class Projectile : MonoBehaviour
 {
     public Vector3 targetPosition;
     public float speed;
-    //public HealthScript healthScript;
+    public HealthScript healthScript;
 
     private void Start()
     {
         //targetPosition = FindObjectOfType<Rigidbody>().transform.position;
         targetPosition = GameObject.Find("Player").transform.position;
-        //healthScript = GameObject.Find("Player").GetComponent<HealthScript>();
+        healthScript = GameObject.Find("Player").GetComponent<HealthScript>();
     }
 
     private void Update()
@@ -25,5 +25,15 @@ public class Projectile : MonoBehaviour
             Destroy(gameObject);
         }
     }
-    
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.tag == "Player")
+        {
+            healthScript.TakeDamage(20);
+        }
+
+
+    }
+
 }

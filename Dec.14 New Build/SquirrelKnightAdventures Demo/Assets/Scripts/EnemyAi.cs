@@ -48,7 +48,7 @@ public class EnemyAi : MonoBehaviour
 
     [SerializeField] private bool alreadyAttacked;
 
-    [SerializeField] private bool shot;
+
 
     [Header("States")]
 
@@ -67,8 +67,7 @@ public class EnemyAi : MonoBehaviour
     {
         //Finds enemys NavMeshAgent, Transform and lastpositon when the game starts
         _lastPosition = agent.transform.position;
-        player = GameObject.Find("Player").transform;
-        agent = GetComponent<NavMeshAgent>();
+        
         
     }
     private void Update()
@@ -233,7 +232,7 @@ public class EnemyAi : MonoBehaviour
         //Instanitates the projectile
         if (Time.time > nextshotTime)
         {
-            shot = true;
+           
             Instantiate(projectile, transform.position, Quaternion.identity);
             nextshotTime = Time.time + timeBetweenShots;
         }
@@ -247,7 +246,7 @@ public class EnemyAi : MonoBehaviour
         //resets the enemys attack
         if (!alreadyAttacked)
         {
-            shot = false;
+            
             alreadyAttacked = true;
             Invoke(nameof(ResetAttack), timeBetweenAttacks);
         }
@@ -278,7 +277,7 @@ public class EnemyAi : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag == "Player" && anim.GetBool("enemyAttacking") || other.gameObject.tag == "Player" && shot)
+        if (other.gameObject.tag == "Player" && anim.GetBool("enemyAttacking"))
         {
             healthScript.TakeDamage(20);
         }
@@ -294,6 +293,7 @@ public class EnemyAi : MonoBehaviour
         Gizmos.DrawWireSphere(transform.position, attackRange);
         Gizmos.color = Color.blue;
         Gizmos.DrawWireSphere(transform.position, rangeAttack);
+
     }
 
 }
