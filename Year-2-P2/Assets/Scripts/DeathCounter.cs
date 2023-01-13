@@ -1,18 +1,56 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using System.Collections.Generic;
+using System.Collections;
 using UnityEngine.UI;
 using TMPro;
 using Unity.VisualScripting;
+using System;
+using UnityEngine.SocialPlatforms.Impl;
 
 public class DeathCounter : MonoBehaviour
 {
+    public int deaths = 0;
 
+    //Reference to your Text, dragged in via the inspector
+    public TextMeshProUGUI DeathCountText;
 
-    public Text DeathCount;
-    public void SetText(int text)
+    //private Scene scene;
+
+    public void SetText(string text)
     {
-        //string deathsS = deaths.ToString();
-        //DeathCount.text = deathsS;
+        DeathCountText.text = "Death Count: " + text;
     }
+
+    void Update()
+    {
+        DeathCountText.text = "Deaths: " + deaths.ToString();
+    }
+
+    /*void Start()
+    {
+        scene = SceneManager.GetActiveScene();
+    }*/
+
+    void OnCollisionEnter2D(Collision2D col)
+    {
+        if (col.transform.CompareTag("Player"))
+        {
+            deaths = deaths + 1;
+            //Just update the referenced UI text
+            DeathCountText.text = "Death Count: " + deaths;
+            Debug.Log("You are dead");
+            System.Threading.Thread.Sleep(500);
+            SceneManager.LoadScene(0);
+        }
+
+    }
+
+
+
+
+
+
 
 
 
