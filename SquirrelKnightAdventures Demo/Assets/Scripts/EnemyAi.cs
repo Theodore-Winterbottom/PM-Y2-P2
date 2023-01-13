@@ -1,6 +1,5 @@
 using System.Collections;
 using UnityEditor;
-using UnityEditorInternal;
 using UnityEngine;
 using UnityEngine.AI;
 #region Main Script
@@ -12,8 +11,6 @@ public class EnemyAi : MonoBehaviour
 
     [SerializeField] private NavMeshAgent nav_agent;
 
-    [SerializeField] private Vector3 walkPoint;
-
     [SerializeField] private Transform target_object;
 
     [SerializeField] private LayerMask player_layermask;
@@ -24,36 +21,30 @@ public class EnemyAi : MonoBehaviour
 
     [SerializeField] private Animator attack_animation;
 
-    [SerializeField] private float walkPointRange;
-
-    [SerializeField] private Vector3 _lastPosition;
-
-    [SerializeField] private float velocity;
-
     [SerializeField] private float timeBetweenAttacks;
+
+    [SerializeField] private float walkPointRange;
 
     [SerializeField] private float timeBetweenShots;
 
     [SerializeField] private float nextshotTime;
 
-    [SerializeField] private bool alreadyAttacked;
+    [SerializeField] private float sightRange;
 
-    [SerializeField] private float sightRange, attackRange, rangeAttack;
-    
-    [SerializeField] public bool playerInSightRange, playerInAttackRange, playerInRangeAttack;
+    [SerializeField] private float attackRange;
+
+    [SerializeField] private float rangeAttack;
 
     [SerializeField] private float speed;
-    
-    [SerializeField] private Vector3 lastpoint;
-    [SerializeField] private Vector3 currentPosition;
-    [SerializeField] private bool settinglast;
-    [SerializeField] private float moveDirectionF;
-    [SerializeField] private float LastPositionF;
-    [SerializeField] private Vector3 moveDirection;
-    [SerializeField] private bool walkPointSet;
+
+    public bool playerInSightRange, playerInAttackRange, playerInRangeAttack, walkPointSet, settinglast, alreadyAttacked;
+
+    private Vector3 walkPoint, moveDirection, currentPosition, _lastPosition;
+
     #endregion
+
     #region Script
-    [SerializeField]private void Awake()
+   private void Awake()
     {
         nav_agent = GetComponent<NavMeshAgent>();
         //Finds enemys NavMeshAgent, Transform and lastpositon when the game starts
@@ -62,7 +53,8 @@ public class EnemyAi : MonoBehaviour
     }
     private void Update()
     {
-        
+
+        Debug.Log(player_layermask.value);
         if (!settinglast)
         {
             settinglast = true;
@@ -255,6 +247,8 @@ public class EnemyAi : MonoBehaviour
 [CustomEditor(typeof(EnemyAi))]
 public class EnemyEditor : Editor
 {
+    public int ground_layer_value;
+    public int player_layer_value;
     public enum DisplayCategory
     {
         Melee_Enemy, Ranged_Enemy, Boss_Enemy, Flying_Enemy
@@ -265,15 +259,20 @@ public class EnemyEditor : Editor
     SerializedProperty enemyType;
     SerializedProperty target_object;
     SerializedProperty nav_agent;
-
     SerializedProperty ground_layermask;
     SerializedProperty player_layermask;
+    SerializedProperty projectile_prefab;
+    SerializedProperty attack_animation;
+    SerializedProperty timeBetweenAttacks;
+    SerializedProperty walkPointRange;
+    SerializedProperty timeBetweenShots;
+    SerializedProperty nextshotTime;
+    SerializedProperty sightRange;
+    SerializedProperty attackRange;
+    SerializedProperty rangeAttack;
+    SerializedProperty speed;
 
-    SerializedProperty projectile;
 
-    SerializedProperty anim;
-    SerializedProperty rb;
-    SerializedProperty walkPoint;
     void OnEnable()
     {
         enemyType = serializedObject.FindProperty("enemyType");
@@ -281,8 +280,17 @@ public class EnemyEditor : Editor
         nav_agent = serializedObject.FindProperty("nav_agent");
         ground_layermask = serializedObject.FindProperty("ground_layermask");
         player_layermask = serializedObject.FindProperty("player_layermask");
-        enemyType = serializedObject.FindProperty("enemyType");
+        projectile_prefab = serializedObject.FindProperty("projectile_prefab");
+        attack_animation = serializedObject.FindProperty("attack_animation");
+        timeBetweenAttacks = serializedObject.FindProperty("timeBetweenAttacks");
+        walkPointRange = serializedObject.FindProperty("walkPointRange");
+        timeBetweenShots = serializedObject.FindProperty("timeBetweenShots");
+        nextshotTime = serializedObject.FindProperty("nextshotTime");
 
+        sightRange = serializedObject.FindProperty("sightRange");
+        attackRange = serializedObject.FindProperty("attackRange");
+        rangeAttack = serializedObject.FindProperty("rangeAttack");
+        speed = serializedObject.FindProperty("speed");
     }
     public override void OnInspectorGUI()
     {
@@ -324,7 +332,12 @@ public class EnemyEditor : Editor
     {
         EditorGUILayout.Space(5f);
         EditorGUILayout.LabelField("Melee Enemey Type", EditorStyles.boldLabel);
-        EditorGUI.indentLevel = 0;
+        EditorGUI.indentLevel = 1;
+
+        EditorGUILayout.Space(3f);
+        EditorGUILayout.LabelField("Attack Animation");
+        EditorGUILayout.ObjectField(attack_animation, GUIContent.none);
+        
 
         
     }
@@ -332,46 +345,112 @@ public class EnemyEditor : Editor
     {
         EditorGUILayout.Space(5f);
         EditorGUILayout.LabelField("Ranged Enemey Type", EditorStyles.boldLabel);
-        EditorGUI.indentLevel = 0;
+        EditorGUI.indentLevel = 1;
+
+        EditorGUILayout.Space(3f);
+        EditorGUILayout.LabelField("Projectile Prefab");
+        EditorGUILayout.ObjectField(projectile_prefab, GUIContent.none);
+        
     }
     void DisplayBossEnemyStats()
     {
         EditorGUILayout.Space(5f);
         EditorGUILayout.LabelField("Boss Eemey Type", EditorStyles.boldLabel);
-        EditorGUI.indentLevel = 0;
+        EditorGUI.indentLevel = 1;
+
+        EditorGUILayout.Space(3f);
+        EditorGUILayout.LabelField("Attack Animation");
+        EditorGUILayout.ObjectField(attack_animation, GUIContent.none);
+        
+
+        
     }
     void DisplayFlyingEnemyStats()
     {
         EditorGUILayout.Space(5f);
         EditorGUILayout.LabelField("Flying Eemey Type", EditorStyles.boldLabel);
-        EditorGUI.indentLevel = 0;
+        EditorGUI.indentLevel = 1;
+
+        EditorGUILayout.Space(3f);
+        EditorGUILayout.LabelField("Projectile Prefab");
+        EditorGUILayout.ObjectField(projectile_prefab, GUIContent.none);
+        
+
+        
     }
 
     void DisplayBasicStats()
     {
+        EditorGUI.indentLevel = 0;
+
         EditorGUILayout.Space(5f);
         EditorGUILayout.LabelField("Basic Stats", EditorStyles.boldLabel);
         EditorGUI.indentLevel = 1;
 
-        EditorGUILayout.Space(2f);
-        EditorGUILayout.LabelField("Object Declaration");
-        EditorGUI.indentLevel = 1;
+        EditorGUILayout.Space(3f);
+        EditorGUILayout.LabelField("Object Declaration", EditorStyles.boldLabel);
+        
 
-        EditorGUILayout.Space(5f);
+        EditorGUILayout.Space(3f);
+        EditorGUILayout.LabelField("Ai Target");
         EditorGUILayout.ObjectField(target_object, GUIContent.none);
-        EditorGUI.indentLevel = 1;
+        
 
-        EditorGUILayout.Space(1f);
+        EditorGUILayout.Space(3f);
+        EditorGUILayout.LabelField("Ai NavAgent");
         EditorGUILayout.ObjectField(nav_agent, GUIContent.none);
-        EditorGUI.indentLevel = 1;
 
-        EditorGUILayout.Space(1f);
-        ground_layermask.intValue = EditorGUILayout.LayerField("Layer for Objects:", 100);
-        EditorGUI.indentLevel = 1;
 
-        EditorGUILayout.Space(1f);
-        //EditorGUILayout.LayerField("Layer for Objects:", 100);
-        EditorGUI.indentLevel = 1;
+        EditorGUILayout.Space(3f);
+        EditorGUILayout.LabelField("Ground Layer");
+        ground_layermask.intValue = EditorGUILayout.LayerField(ground_layermask.intValue);
+
+        EditorGUILayout.Space(3f);
+        EditorGUILayout.LabelField("Player Layer");
+        player_layermask.intValue = EditorGUILayout.LayerField(player_layermask.intValue);
+
+
+
+
+
+
+
+
+        // before organized var
+
+        EditorGUILayout.Space(3f);
+        EditorGUILayout.LabelField("Time Between Attacks");
+        EditorGUILayout.Slider(timeBetweenAttacks, 0, 20, GUIContent.none);
+
+        EditorGUILayout.Space(3f);
+        EditorGUILayout.LabelField("Walk Point Range");
+        EditorGUILayout.Slider(walkPointRange, 0, 20, GUIContent.none);
+
+        EditorGUILayout.Space(3f);
+        EditorGUILayout.LabelField("Time Between Shots");
+        EditorGUILayout.Slider(timeBetweenShots, 0, 20, GUIContent.none);
+
+        EditorGUILayout.Space(3f);
+        EditorGUILayout.LabelField("Next Shot Time");
+        EditorGUILayout.Slider(nextshotTime, 0, 20, GUIContent.none);
+
+
+
+        EditorGUILayout.Space(3f);
+        EditorGUILayout.LabelField("Sight Range");
+        EditorGUILayout.Slider(sightRange, 0, 20, GUIContent.none);
+
+        EditorGUILayout.Space(3f);
+        EditorGUILayout.LabelField("Attack Range");
+        EditorGUILayout.Slider(attackRange, 0, 20, GUIContent.none);
+
+        EditorGUILayout.Space(3f);
+        EditorGUILayout.LabelField("Range Attack");
+        EditorGUILayout.Slider(rangeAttack, 0, 20, GUIContent.none);
+
+        EditorGUILayout.Space(3f);
+        EditorGUILayout.LabelField("Speed");
+        EditorGUILayout.Slider(speed, 0, 20, GUIContent.none);
     }
 }
 #endregion
