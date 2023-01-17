@@ -2,12 +2,14 @@ using System.Collections;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.EventSystems;
+using UnityEngine.ProBuilder;
 #region Main Script
 public class EnemyAi : MonoBehaviour
 {
     #region Variables
 
-    [SerializeField] private bool enemyType;
+    [SerializeField] private int enemyType;
 
     [SerializeField] private NavMeshAgent nav_agent;
 
@@ -44,30 +46,28 @@ public class EnemyAi : MonoBehaviour
     #endregion
 
     #region Script
-   private void Awake()
+    private void Awake()
     {
-        nav_agent = GetComponent<NavMeshAgent>();
         //Finds enemys NavMeshAgent, Transform and lastpositon when the game starts
         _lastPosition = nav_agent.transform.position;
-        
+
     }
     private void Update()
-    {
+    { 
 
-        Debug.Log(player_layermask.value);
         if (!settinglast)
         {
+            
             settinglast = true;
             StartCoroutine(setLastPosition());
         }
-        
+
         currentPosition = nav_agent.transform.position;
     }
     private void FixedUpdate()
     {
         //Check for sight and attack range
 
-        
 
         playerInSightRange = Physics.CheckSphere(transform.position, sightRange, player_layermask);
         playerInAttackRange = Physics.CheckSphere(transform.position, attackRange, player_layermask);
@@ -106,20 +106,31 @@ public class EnemyAi : MonoBehaviour
         float playerdistance = (transform.position - target_object.position).magnitude;
 
         moveDirection = currentPosition - _lastPosition;
-        
+
         if (Mathf.Sign(moveDirection.x) == nav_agent.transform.localScale.x && playerdistance != 1f)
         {
-            flipEnemy();
+            if (moveDirection.x < 0)
+            {
+
+                
+                
+                flipEnemy();
+
+            }
+            else
+            {
+                
+                
+                flipEnemy();
+
+            }
         }
     }
-    private void ChasePlayer()
-    {
-        Debug.Log("chasing");
-        //Chases the player as long as it is in range
-        nav_agent.SetDestination(target_object.position);
-    }
+
     private void Patroling()
     {
+        Debug.Log(walkPointSet);
+        
         //If no walkpoint finds walk point
         if (!walkPointSet)
         {
@@ -139,27 +150,28 @@ public class EnemyAi : MonoBehaviour
         {
             walkPointSet = false;
         }
+        
     }
 
     private void SearchWalkPoint()
     {
         //Calculate random point in range
-
+        
         float randomZ = Random.Range(-walkPointRange, walkPointRange);
         float randomX = Random.Range(-walkPointRange, walkPointRange);
 
         walkPoint = new Vector3(transform.position.x + randomX, transform.position.y);
-
+        Debug.Log(ground_layermask.value);
         //sets walk point with the random range it obtained
-        if (Physics.Raycast(walkPoint, -transform.up, 2f, ground_layermask))
+        if (Physics.Raycast(walkPoint, -Vector3.up, 2f, ground_layermask))
         {
             walkPointSet = true;
+            Debug.Log(walkPointSet);
         }
     }
 
     private void flipEnemy()
     {
-        Debug.Log("flipped");
         Vector3 currentScale = nav_agent.transform.localScale;
 
         currentScale.x *= -1;
@@ -168,13 +180,17 @@ public class EnemyAi : MonoBehaviour
     }
     private IEnumerator setLastPosition()
     {
-        
+
         yield return new WaitForSeconds(1);
         _lastPosition = nav_agent.transform.position;
         settinglast = false;
     }
 
-    
+    private void ChasePlayer()
+    {
+        //Chases the player as long as it is in range
+        nav_agent.SetDestination(target_object.position);
+    }
 
     public void AttackPlayer()
     {
@@ -201,6 +217,7 @@ public class EnemyAi : MonoBehaviour
         //Instanitates the projectile
         if (Time.time > nextshotTime)
         {
+
             Instantiate(projectile_prefab, transform.position, Quaternion.identity);
             nextshotTime = Time.time + timeBetweenShots;
         }
@@ -214,6 +231,7 @@ public class EnemyAi : MonoBehaviour
         //resets the enemys attack
         if (!alreadyAttacked)
         {
+
             alreadyAttacked = true;
             Invoke(nameof(ResetAttack), timeBetweenAttacks);
         }
@@ -230,6 +248,28 @@ public class EnemyAi : MonoBehaviour
         //Kills the emeny when health reachs zero
         Destroy(gameObject);
     }
+    /*
+    public void TakeDamage(int damage)
+    {
+
+        health -= damage;
+
+        if (health <= 0)
+        {
+            Death();
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.tag == "Player" && anim.GetBool("enemyAttacking"))
+        {
+            healthScript.TakeDamage(20);
+        }
+
+
+    }
+    */
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.green;
@@ -238,7 +278,10 @@ public class EnemyAi : MonoBehaviour
         Gizmos.DrawWireSphere(transform.position, attackRange);
         Gizmos.color = Color.blue;
         Gizmos.DrawWireSphere(transform.position, rangeAttack);
+
+        
     }
+
 }
 #endregion
 #endregion
@@ -286,7 +329,6 @@ public class EnemyEditor : Editor
         walkPointRange = serializedObject.FindProperty("walkPointRange");
         timeBetweenShots = serializedObject.FindProperty("timeBetweenShots");
         nextshotTime = serializedObject.FindProperty("nextshotTime");
-
         sightRange = serializedObject.FindProperty("sightRange");
         attackRange = serializedObject.FindProperty("attackRange");
         rangeAttack = serializedObject.FindProperty("rangeAttack");
@@ -306,19 +348,24 @@ public class EnemyEditor : Editor
 
         switch (categoryToDisplay)
         {
+
             case DisplayCategory.Melee_Enemy:
+                enemyType.intValue = 1;
                 DisplayMeleeEnemyStats();
                 break;
 
             case DisplayCategory.Ranged_Enemy:
+                enemyType.intValue = 2;
                 DisplayRangedEnemyStats();
                 break;
 
             case DisplayCategory.Boss_Enemy:
+                enemyType.intValue = 3;
                 DisplayBossEnemyStats();
                 break;
 
             case DisplayCategory.Flying_Enemy:
+                enemyType.intValue = 4;
                 DisplayFlyingEnemyStats();
                 break;
         }
@@ -330,6 +377,7 @@ public class EnemyEditor : Editor
     
     void DisplayMeleeEnemyStats()
     {
+        
         EditorGUILayout.Space(5f);
         EditorGUILayout.LabelField("Melee Enemey Type", EditorStyles.boldLabel);
         EditorGUI.indentLevel = 1;
@@ -447,7 +495,7 @@ public class EnemyEditor : Editor
         EditorGUILayout.Space(3f);
         EditorGUILayout.LabelField("Range Attack");
         EditorGUILayout.Slider(rangeAttack, 0, 20, GUIContent.none);
-
+        
         EditorGUILayout.Space(3f);
         EditorGUILayout.LabelField("Speed");
         EditorGUILayout.Slider(speed, 0, 20, GUIContent.none);
