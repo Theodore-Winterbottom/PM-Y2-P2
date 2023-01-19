@@ -163,10 +163,9 @@ public class EnemyAi : MonoBehaviour
         walkPoint = new Vector3(transform.position.x + randomX, transform.position.y);
         Debug.Log(ground_layermask.value);
         //sets walk point with the random range it obtained
-        if (Physics.Raycast(walkPoint, -Vector3.up, 2f, ground_layermask))
+        if (Physics.Raycast(walkPoint, -transform.up, 20f, ground_layermask))
         {
             walkPointSet = true;
-            Debug.Log(walkPointSet);
         }
     }
 
