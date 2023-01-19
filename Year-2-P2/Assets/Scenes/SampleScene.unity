@@ -2380,7 +2380,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1747464304
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2619,8 +2619,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   countUp: 1
-  firstHour: {fileID: 1924773521}
-  secondHour: {fileID: 1857483926}
+  hourCount: 0
+  minCount: 0
+  secCount: 0
   separator1: {fileID: 1747464305}
   firstMinute: {fileID: 217199542}
   secondMinute: {fileID: 108591789}
@@ -2674,7 +2675,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1857483925
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3079,7 +3080,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1924773520
 RectTransform:
   m_ObjectHideFlags: 0
