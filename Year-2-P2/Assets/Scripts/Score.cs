@@ -1,5 +1,4 @@
-using UnityEngine;
-using UnityEngine.UI;
+/*using UnityEngine.UI;
 using TMPro;
 
 public class Score : MonoBehaviour
@@ -27,4 +26,4 @@ public class Score : MonoBehaviour
         score += 1;
         scoreText.text = "Score: " + score.ToString();
     }
-}
+}*/

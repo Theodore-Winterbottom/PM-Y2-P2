@@ -53,7 +53,14 @@ public class HealthScript : MonoBehaviour
     private void OnCollisionEnter(Collision collision)
     {
         // Enemy deals damage to the player if enemy hits player
-        if (collision.gameObject.tag == "Enemy")
+        /*if (collision.gameObject.tag == "Enemy")
+        {
+            // Apply damage to the player using the HealthScript component
+            TakeDamage(damageAmount);
+        }*/
+
+        // Enemy deals damage to the player if enemy hits player
+        if (collision.gameObject.tag == "Player")
         {
             // Apply damage to the player using the HealthScript component
             TakeDamage(damageAmount);
