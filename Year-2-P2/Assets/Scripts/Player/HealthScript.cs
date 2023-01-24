@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -19,6 +20,8 @@ public class HealthScript : MonoBehaviour
 
     [Tooltip("Damage to be applied when the object is hit")] [SerializeField] private float damage = 16.6f;
 
+    public Stats stats;
+
     // Method to take damage
     private void TakeDamage(float damage)
     {
@@ -37,6 +40,8 @@ public class HealthScript : MonoBehaviour
         {
             // If the object's health is zero or less, destroy it
             Destroy(gameObject);
+            stats.EnemyKilled();
+            stats.PlayerKilled();
 
             //GameplayController.instance.RestartGame();
         }
@@ -53,18 +58,21 @@ public class HealthScript : MonoBehaviour
     private void OnCollisionEnter(Collision collision)
     {
         // Enemy deals damage to the player if enemy hits player
-        /*if (collision.gameObject.tag == "Enemy")
-        {
-            // Apply damage to the player using the HealthScript component
-            TakeDamage(damageAmount);
-        }*/
-
-        // Enemy deals damage to the player if enemy hits player
-        if (collision.gameObject.tag == "Player")
+        if (collision.gameObject.tag == "Enemy")
         {
             // Apply damage to the player using the HealthScript component
             TakeDamage(damageAmount);
         }
+
+        // Enemy deals damage to the player if enemy hits player
+        /*if (collision.gameObject.tag == "Player")
+        {
+            // Apply damage to the player using the HealthScript component
+            TakeDamage(damageAmount);
+
+        }*/
     }
+
+   
 
 }

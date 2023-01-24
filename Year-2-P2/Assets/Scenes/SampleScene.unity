@@ -701,6 +701,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyKillCountText: {fileID: 1464895922}
+  enemyKillCount: 0
 --- !u!4 &293911555
 Transform:
   m_ObjectHideFlags: 0
@@ -1016,7 +1017,6 @@ GameObject:
   - component: {fileID: 472783713}
   - component: {fileID: 472783720}
   - component: {fileID: 472783721}
-  - component: {fileID: 472783722}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -1149,6 +1149,7 @@ MonoBehaviour:
   damageAmount: 16.6
   health: 100
   damage: 16.6
+  stats: {fileID: 1850017512}
 --- !u!114 &472783721
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1161,21 +1162,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 256d693311beaef44b227d969d0da402, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  killCountText: {fileID: 0}
-  killCount: 0
---- !u!114 &472783722
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 472783712}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9a5b45baf25851549ad9c7d64b4e6cf3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  killCountText: {fileID: 1464895922}
 --- !u!1 &475415205
 GameObject:
   m_ObjectHideFlags: 0
@@ -2323,10 +2309,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b829ebc031ad64478a0c9bb6525d8a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  score: 0
-  highScore: 0
-  scoreText: {fileID: 0}
-  highScoreText: {fileID: 0}
 --- !u!1 &1546064320
 GameObject:
   m_ObjectHideFlags: 0
@@ -2619,6 +2601,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf2a7150708c5d4489b4acaff2c418ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  healthScript: {fileID: 0}
   countUp: 1
   hourCount: 0
   minCount: 0
@@ -2629,6 +2612,8 @@ MonoBehaviour:
   separator2: {fileID: 1896579207}
   firstSecond: {fileID: 1342381584}
   secondSecond: {fileID: 1242038555}
+  killCountText: {fileID: 1464895922}
+  deathCountText: {fileID: 1859633539}
 --- !u!114 &1850017514
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2641,10 +2626,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b829ebc031ad64478a0c9bb6525d8a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  score: 0
-  highScore: 0
-  scoreText: {fileID: 1194503192}
-  highScoreText: {fileID: 712467841}
 --- !u!114 &1850017515
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2657,8 +2638,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 256d693311beaef44b227d969d0da402, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  killCountText: {fileID: 0}
-  killCount: 0
 --- !u!1 &1857483924
 GameObject:
   m_ObjectHideFlags: 0
@@ -3297,6 +3276,16 @@ PrefabInstance:
       propertyPath: slider
       value: 
       objectReference: {fileID: 1449108294}
+    - target: {fileID: 93389658450476284, guid: 938bb1e1d29e4c94a9db3606c52fe248,
+        type: 3}
+      propertyPath: killCountText
+      value: 
+      objectReference: {fileID: 1464895922}
+    - target: {fileID: 93389658450476284, guid: 938bb1e1d29e4c94a9db3606c52fe248,
+        type: 3}
+      propertyPath: deathCountText
+      value: 
+      objectReference: {fileID: 1859633539}
     - target: {fileID: 93389658450476292, guid: 938bb1e1d29e4c94a9db3606c52fe248,
         type: 3}
       propertyPath: m_Name

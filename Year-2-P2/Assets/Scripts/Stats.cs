@@ -5,6 +5,8 @@ using Unity.VisualScripting;
 
 public class Stats : MonoBehaviour
 {
+    public HealthScript healthScript;
+
     // Set Time
     private float timerDuration = 0.0001f * 60f;
 
@@ -75,4 +77,71 @@ public class Stats : MonoBehaviour
         firstSecond.text = currentTime[2].ToString();
         secondSecond.text = currentTime[3].ToString();
     }
+
+    
+    // Kill count text
+    [SerializeField]
+    private TextMeshProUGUI killCountText;
+
+    private int killCount;
+
+    // Method to add kills
+    public void EnemyKilled()
+    {
+        
+        // Adds kills to player kill count
+        killCount++;
+        killCountText.text = "Kills: " + killCount;
+    }
+
+
+
+    // Death count text
+    [SerializeField]
+    private TextMeshProUGUI deathCountText;
+
+    private int deathCount;
+
+    // Method to add deaths
+    public void PlayerKilled()
+    {
+        // Add deaths to player death count
+        deathCount++;
+        deathCountText.text = "Deaths: " + deathCount;
+    }
+
+
+    /*using UnityEngine.UI;
+using TMPro;
+
+public class Score : MonoBehaviour
+{
+    public static Score insatance;
+    
+    public int score = 0;
+    public int highScore = 0;
+    public TextMeshProUGUI scoreText;
+    public TextMeshProUGUI highScoreText;
+
+    private void Awake()
+    {
+        insatance = this;
+    }
+
+    void Update()
+    {
+        scoreText.text = "Score: " + score.ToString();
+        highScoreText.text = "HighScore: " + highScore.ToString();
+    }
+
+    public void AddPoints(int points)
+    {
+        score += 1;
+        scoreText.text = "Score: " + score.ToString();
+    }
+}*/
+
+
+
+
 }
