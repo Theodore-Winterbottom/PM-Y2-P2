@@ -10,6 +10,7 @@ TagManager:
   - Enemy
   - Deaths
   - Kills
+  - Boss
   layers:
   - Default
   - TransparentFX

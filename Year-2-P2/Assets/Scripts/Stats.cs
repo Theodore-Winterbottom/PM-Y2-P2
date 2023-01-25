@@ -2,10 +2,27 @@ using UnityEngine;
 using TMPro;
 using System.Net.NetworkInformation;
 using Unity.VisualScripting;
+using UnityEngine.ProBuilder.MeshOperations;
 
 public class Stats : MonoBehaviour
 {
-    public HealthScript healthScript;
+    [Tooltip("Place the HealthScript game object Here")][SerializeField] public HealthScript healthScript;
+
+    // Death count text
+    [SerializeField]
+    private TextMeshProUGUI deathCountText;
+
+    // Kill count text
+    [SerializeField]
+    private TextMeshProUGUI killCountText;
+
+    // Death count variable
+    private int deathCount;
+
+    // Kill count variable
+    private int killCount;
+
+    private int bossKillCount;
 
     // Set Time
     private float timerDuration = 0.0001f * 60f;
@@ -20,13 +37,11 @@ public class Stats : MonoBehaviour
     public float secCount;
 
     [SerializeField]
-    private TextMeshProUGUI separator1;
-    [SerializeField]
     private TextMeshProUGUI firstMinute;
     [SerializeField]
     private TextMeshProUGUI secondMinute;
     [SerializeField]
-    private TextMeshProUGUI separator2;
+    private TextMeshProUGUI separator;
     [SerializeField]
     private TextMeshProUGUI firstSecond;
     [SerializeField]
@@ -78,70 +93,25 @@ public class Stats : MonoBehaviour
         secondSecond.text = currentTime[3].ToString();
     }
 
-    
-    // Kill count text
-    [SerializeField]
-    private TextMeshProUGUI killCountText;
-
-    private int killCount;
+    // Method to add deaths
+    public void Playerkilled(GameObject other)
+    {
+        if (other.gameObject.CompareTag("Enemy"))
+        {
+            // Add deaths to player death count
+            deathCount++;
+            deathCountText.text = "Deaths: " + deathCount;
+        }
+    }
 
     // Method to add kills
-    public void EnemyKilled()
+    public void EnemyKilled(GameObject other)
     {
-        
-        // Adds kills to player kill count
-        killCount++;
-        killCountText.text = "Kills: " + killCount;
+        if (other.gameObject.CompareTag("Player"))
+        {
+            // Adds kills to player kill count
+            killCount++;
+            killCountText.text = "Kills: " + killCount;
+        }
     }
-
-
-
-    // Death count text
-    [SerializeField]
-    private TextMeshProUGUI deathCountText;
-
-    private int deathCount;
-
-    // Method to add deaths
-    public void PlayerKilled()
-    {
-        // Add deaths to player death count
-        deathCount++;
-        deathCountText.text = "Deaths: " + deathCount;
-    }
-
-
-    /*using UnityEngine.UI;
-using TMPro;
-
-public class Score : MonoBehaviour
-{
-    public static Score insatance;
-    
-    public int score = 0;
-    public int highScore = 0;
-    public TextMeshProUGUI scoreText;
-    public TextMeshProUGUI highScoreText;
-
-    private void Awake()
-    {
-        insatance = this;
-    }
-
-    void Update()
-    {
-        scoreText.text = "Score: " + score.ToString();
-        highScoreText.text = "HighScore: " + highScore.ToString();
-    }
-
-    public void AddPoints(int points)
-    {
-        score += 1;
-        scoreText.text = "Score: " + score.ToString();
-    }
-}*/
-
-
-
-
 }
