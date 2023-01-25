@@ -19,6 +19,6 @@ public class MainMenu : MonoBehaviour
 
     public void BcakButton()
     {
-        SceneManager.LoadScene(0);
+        SettingsMenu.SetActive(false);
     }
 }
