@@ -53,8 +53,9 @@ public class EnemyAi : MonoBehaviour
 
     }
     private void Update()
-    { 
-
+    {
+        Debug.Log(player_layermask.value);
+        Debug.Log(ground_layermask.value);
         if (!settinglast)
         {
             
@@ -129,7 +130,6 @@ public class EnemyAi : MonoBehaviour
 
     private void Patroling()
     {
-        Debug.Log(walkPointSet);
         
         //If no walkpoint finds walk point
         if (!walkPointSet)
@@ -161,10 +161,12 @@ public class EnemyAi : MonoBehaviour
         float randomX = Random.Range(-walkPointRange, walkPointRange);
 
         walkPoint = new Vector3(transform.position.x + randomX, transform.position.y);
-        Debug.Log(ground_layermask.value);
+     
         //sets walk point with the random range it obtained
-        if (Physics.Raycast(walkPoint, -transform.up, 20f, ground_layermask))
+        RaycastHit hit;
+        if (Physics.Raycast(walkPoint, -transform.up, out hit, 20f, ground_layermask))
         {
+            Debug.Log(hit.collider.gameObject.name);
             walkPointSet = true;
         }
     }
@@ -446,15 +448,6 @@ public class EnemyEditor : Editor
         EditorGUILayout.Space(3f);
         EditorGUILayout.LabelField("Ai NavAgent");
         EditorGUILayout.ObjectField(nav_agent, GUIContent.none);
-
-
-        EditorGUILayout.Space(3f);
-        EditorGUILayout.LabelField("Ground Layer");
-        ground_layermask.intValue = EditorGUILayout.LayerField(ground_layermask.intValue);
-
-        EditorGUILayout.Space(3f);
-        EditorGUILayout.LabelField("Player Layer");
-        player_layermask.intValue = EditorGUILayout.LayerField(player_layermask.intValue);
 
 
 
