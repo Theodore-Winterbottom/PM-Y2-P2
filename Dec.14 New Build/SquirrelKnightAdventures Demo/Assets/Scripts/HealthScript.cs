@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -19,6 +20,9 @@ public class HealthScript : MonoBehaviour
 
     [Tooltip("Damage to be applied when the object is hit")] [SerializeField] private float damage = 16.6f;
 
+    [SerializeField]
+    public Stats stats;
+
     // Method to take damage
     public void TakeDamage(float damage)
     {
@@ -37,6 +41,8 @@ public class HealthScript : MonoBehaviour
         {
             // If the object's health is zero or less, destroy it
             Destroy(gameObject);
+            stats.Playerkilled(gameObject);
+            stats.EnemyKilled(gameObject);
         }
     }
 
