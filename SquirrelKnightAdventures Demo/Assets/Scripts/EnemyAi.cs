@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.AI;
@@ -39,6 +40,8 @@ public class EnemyAi : MonoBehaviour
 
     [SerializeField] private float speed;
 
+    [SerializeField] private List<GameObject> patrolPoints;
+
     public bool playerInSightRange, playerInAttackRange, playerInRangeAttack, walkPointSet, settinglast, alreadyAttacked;
 
     private Vector3 walkPoint, moveDirection, currentPosition, _lastPosition;
@@ -54,8 +57,6 @@ public class EnemyAi : MonoBehaviour
     }
     private void Update()
     {
-        Debug.Log(player_layermask.value);
-        Debug.Log(ground_layermask.value);
         if (!settinglast)
         {
             
@@ -110,21 +111,7 @@ public class EnemyAi : MonoBehaviour
 
         if (Mathf.Sign(moveDirection.x) == nav_agent.transform.localScale.x && playerdistance != 1f)
         {
-            if (moveDirection.x < 0)
-            {
-
-                
-                
-                flipEnemy();
-
-            }
-            else
-            {
-                
-                
-                flipEnemy();
-
-            }
+            flipEnemy();
         }
     }
 
@@ -144,9 +131,9 @@ public class EnemyAi : MonoBehaviour
         }
 
         Vector3 distanceToWalkPoint = transform.position - walkPoint;
-
+        Debug.Log(walkPoint);
         //Walkpoint reached
-        if (distanceToWalkPoint.magnitude < 1f)
+        if (distanceToWalkPoint.magnitude < 2f)
         {
             walkPointSet = false;
         }
@@ -156,17 +143,13 @@ public class EnemyAi : MonoBehaviour
     private void SearchWalkPoint()
     {
         //Calculate random point in range
-        
-        float randomZ = Random.Range(-walkPointRange, walkPointRange);
         float randomX = Random.Range(-walkPointRange, walkPointRange);
 
         walkPoint = new Vector3(transform.position.x + randomX, transform.position.y);
      
         //sets walk point with the random range it obtained
-        RaycastHit hit;
-        if (Physics.Raycast(walkPoint, -transform.up, out hit, 20f, ground_layermask))
+        if (Physics.Raycast(walkPoint, -transform.up, 20f, ground_layermask))
         {
-            Debug.Log(hit.collider.gameObject.name);
             walkPointSet = true;
         }
     }
@@ -249,28 +232,6 @@ public class EnemyAi : MonoBehaviour
         //Kills the emeny when health reachs zero
         Destroy(gameObject);
     }
-    /*
-    public void TakeDamage(int damage)
-    {
-
-        health -= damage;
-
-        if (health <= 0)
-        {
-            Death();
-        }
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.gameObject.tag == "Player" && anim.GetBool("enemyAttacking"))
-        {
-            healthScript.TakeDamage(20);
-        }
-
-
-    }
-    */
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.green;
@@ -303,8 +264,6 @@ public class EnemyEditor : Editor
     SerializedProperty enemyType;
     SerializedProperty target_object;
     SerializedProperty nav_agent;
-    SerializedProperty ground_layermask;
-    SerializedProperty player_layermask;
     SerializedProperty projectile_prefab;
     SerializedProperty attack_animation;
     SerializedProperty timeBetweenAttacks;
@@ -315,15 +274,13 @@ public class EnemyEditor : Editor
     SerializedProperty attackRange;
     SerializedProperty rangeAttack;
     SerializedProperty speed;
-
+    SerializedProperty patrolPoints;
 
     void OnEnable()
     {
         enemyType = serializedObject.FindProperty("enemyType");
         target_object = serializedObject.FindProperty("target_object");
         nav_agent = serializedObject.FindProperty("nav_agent");
-        ground_layermask = serializedObject.FindProperty("ground_layermask");
-        player_layermask = serializedObject.FindProperty("player_layermask");
         projectile_prefab = serializedObject.FindProperty("projectile_prefab");
         attack_animation = serializedObject.FindProperty("attack_animation");
         timeBetweenAttacks = serializedObject.FindProperty("timeBetweenAttacks");
@@ -334,6 +291,7 @@ public class EnemyEditor : Editor
         attackRange = serializedObject.FindProperty("attackRange");
         rangeAttack = serializedObject.FindProperty("rangeAttack");
         speed = serializedObject.FindProperty("speed");
+        patrolPoints = serializedObject.FindProperty("patrolPoints");
     }
     public override void OnInspectorGUI()
     {
@@ -491,6 +449,7 @@ public class EnemyEditor : Editor
         EditorGUILayout.Space(3f);
         EditorGUILayout.LabelField("Speed");
         EditorGUILayout.Slider(speed, 0, 20, GUIContent.none);
+
     }
 }
 #endregion
