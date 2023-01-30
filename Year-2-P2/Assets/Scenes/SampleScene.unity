@@ -1506,7 +1506,6 @@ GameObject:
   - component: {fileID: 2013418161}
   - component: {fileID: 2013418162}
   - component: {fileID: 2013418163}
-  - component: {fileID: 2013418164}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -1573,23 +1572,6 @@ MonoBehaviour:
   separator: {fileID: 1896579207}
   firstSecond: {fileID: 1342381584}
   secondSecond: {fileID: 1242038555}
---- !u!114 &2013418164
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2013418159}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f7862191dac29264bb32a865d056491b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  stats: {fileID: 0}
-  slider: {fileID: 0}
-  damageAmount: 30
-  health: 1.8
-  damage: 16.6
 --- !u!1001 &93389657376371706
 PrefabInstance:
   m_ObjectHideFlags: 0

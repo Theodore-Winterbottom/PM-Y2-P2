@@ -16,24 +16,13 @@ public class Stats : MonoBehaviour
     [SerializeField]
     private TextMeshProUGUI killCountText;
 
-    // Boss kill count text
-    [SerializeField]
-    public TextMeshProUGUI bossKillCountText;
-
     // Death count variable
     private int deathCount;
 
     [Range(0f, 100f)]
-    [Tooltip("The current health of the object")]
-    [SerializeField]
+    [Tooltip("The current health of the object")][SerializeField]
     // Kill count variable
     private int killCount;
-
-    [Range(0f, 100f)]
-    [Tooltip("The current health of the object")]
-    [SerializeField]
-    public int bossKillCount = 10;
-
 
     // Set Time
     private float timerDuration = 0.0001f * 60f;
@@ -125,18 +114,5 @@ public class Stats : MonoBehaviour
             killCountText.text = "Kills: " + killCount;
         }
     }
-
-    public void BossKilled(GameObject other)
-    {
-        /*if (other.gameObject.CompareTag("Player"))
-        {
-            // Adds 10 kills to player kill count
-            bossKillCount++;
-            bossKillCountText.text = "Kills: " + bossKillCount;
-        }*/
-
-    }
-
-
 
 }
