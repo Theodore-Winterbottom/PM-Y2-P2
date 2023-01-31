@@ -9,6 +9,8 @@ public class HealthScript : MonoBehaviour
 {
     [Tooltip("Place the Stats game object Here")][SerializeField] public Stats stats;
 
+    [Tooltip("Place the HealthScript game object Here")][SerializeField] public Enemy enemy;
+
     [Header("Player Damage Script")]
 
     [Space()]
@@ -43,7 +45,7 @@ public class HealthScript : MonoBehaviour
             Destroy(gameObject);
             stats.Playerkilled(other);
             stats.EnemyKilled(other);
-            //stats.BossKilled(other);
+            stats.BossKilled(other);
         }
 
     }
@@ -59,17 +61,14 @@ public class HealthScript : MonoBehaviour
     private void OnCollisionEnter(Collision collision)
     {
         // Enemy deals damage to the player if enemy hits player
-        /*if (collision.gameObject.tag == "Enemy")
-        {
-            // Apply damage to the player using the HealthScript component
-            TakeDamage(damageAmount, collision.gameObject);
-        }*/
-
-        // Enemy deals damage to the player if enemy hits player
         if (collision.gameObject.tag == "Player")
         {
             // Apply damage to the player using the HealthScript component
             TakeDamage(damageAmount, collision.gameObject); 
+
+            
         }
     }
+
+    
 }

@@ -6,7 +6,7 @@ using UnityEngine.ProBuilder.MeshOperations;
 
 public class Stats : MonoBehaviour
 {
-    [Tooltip("Place the HealthScript game object Here")][SerializeField] public HealthScript healthScript;
+    //[Tooltip("Place the HealthScript game object Here")][SerializeField] public HealthScript healthScript;
 
     // Death count text
     [SerializeField]
@@ -19,10 +19,11 @@ public class Stats : MonoBehaviour
     // Death count variable
     private int deathCount;
 
-    [Range(0f, 100f)]
-    [Tooltip("The current health of the object")][SerializeField]
+    public int bossKillCount;
+
     // Kill count variable
-    private int killCount;
+    [Range(0f, 100f)]
+    [Tooltip("The current health of the object")][SerializeField] private int enemyKillCount;
 
     // Set Time
     private float timerDuration = 0.0001f * 60f;
@@ -109,10 +110,20 @@ public class Stats : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Player"))
         {
+
             // Adds kills to player kill count
-            killCount++;
-            killCountText.text = "Kills: " + killCount;
+            enemyKillCount = enemyKillCount + 1;
+            killCountText.text = "Kills: " + enemyKillCount;
         }
     }
 
+    public void BossKilled(GameObject other)
+    {
+        if (other.gameObject.tag == "Player")
+        {
+            // Adds 10 kills to player kill count
+            bossKillCount = bossKillCount + 10;
+            killCountText.text = "Kills: " + bossKillCount;
+        }
+    }
 }
