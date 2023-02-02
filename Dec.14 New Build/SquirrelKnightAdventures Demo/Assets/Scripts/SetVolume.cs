@@ -18,4 +18,16 @@ public class SetVolume : MonoBehaviour
     {
         musicVolume= volume;
     }
+
+    public void Mute(bool muted)
+    {
+        if(muted)
+        {
+            musicVolume= 0f;
+        }
+        else
+        {
+            musicVolume= 1f;
+        }
+    }
 }
