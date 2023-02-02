@@ -6,8 +6,6 @@ using UnityEngine.ProBuilder.MeshOperations;
 
 public class Stats : MonoBehaviour
 {
-    //[Tooltip("Place the HealthScript game object Here")][SerializeField] public HealthScript healthScript;
-
     // Death count text
     [SerializeField]
     private TextMeshProUGUI deathCountText;
@@ -18,8 +16,6 @@ public class Stats : MonoBehaviour
 
     // Death count variable
     private int deathCount;
-
-    public int bossKillCount;
 
     // Kill count variable
     [Range(0f, 100f)]
@@ -110,20 +106,11 @@ public class Stats : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Player"))
         {
-
             // Adds kills to player kill count
-            enemyKillCount = enemyKillCount + 1;
+            enemyKillCount++;
             killCountText.text = "Kills: " + enemyKillCount;
         }
     }
 
-    public void BossKilled(GameObject other)
-    {
-        if (other.gameObject.tag == "Player")
-        {
-            // Adds 10 kills to player kill count
-            bossKillCount = bossKillCount + 10;
-            killCountText.text = "Kills: " + bossKillCount;
-        }
-    }
+    
 }

@@ -45,7 +45,7 @@ public class HealthScript : MonoBehaviour
             Destroy(gameObject);
             stats.Playerkilled(other);
             stats.EnemyKilled(other);
-            stats.BossKilled(other);
+            enemy.BossKilled(other);
         }
 
     }
@@ -70,5 +70,6 @@ public class HealthScript : MonoBehaviour
         }
     }
 
-    
+   
+
 }
