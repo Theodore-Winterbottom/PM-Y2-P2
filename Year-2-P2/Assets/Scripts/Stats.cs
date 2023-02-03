@@ -13,6 +13,7 @@ public class Stats : MonoBehaviour
     // Kill count text
     [SerializeField]
     private TextMeshProUGUI killCountText;
+    private TextMeshProUGUI bossKillCountText;
 
     // Death count variable
     private int deathCount;
@@ -111,6 +112,8 @@ public class Stats : MonoBehaviour
             killCountText.text = "Kills: " + enemyKillCount;
         }
     }
+
+
 
     
 }
