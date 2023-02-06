@@ -10,8 +10,16 @@ public class UIUXScript : MonoBehaviour
     [SerializeField] private GameObject SettingsMenu;
 
     [SerializeField] private LevelLoader LevelLoader;
+    public MainMenu mainmenu;
 
     private bool GameIsPaused;
+
+    public void Awake()
+    {
+        mainmenu = GameObject.Find("Settings").GetComponent<MainMenu>();
+        SettingsMenu = GameObject.Find("Settings");
+        mainmenu.FindObjects();
+    }
 
     private void Update()
     {
