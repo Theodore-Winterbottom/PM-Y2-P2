@@ -27,6 +27,17 @@ public class Enemy : MonoBehaviour
 
     private TextMeshProUGUI killCountText;
 
+    private TextMeshProUGUI scoreText;
+
+    //private TextMeshProUGUI bossKillCountText;
+
+    // Kill count variable
+    private int enemyKillCount;
+
+    // Score count variable
+    private int scoreCount;
+
+    // Boss Kill count variable
     public int bossKillCount;
 
     // Method to take damage
@@ -47,8 +58,8 @@ public class Enemy : MonoBehaviour
         {
             // If the object's health is zero or less, destroy it
             Destroy(gameObject);
-            BossKilled();
-            
+            stats.EnemyKilled(other);
+
         }
 
     }
@@ -69,18 +80,47 @@ public class Enemy : MonoBehaviour
             // Apply damage to the player using the HealthScript component
             TakeDamage(damageAmount, collision.gameObject);
 
+        }
+        // Enemy deals damage to the player if enemy hits player
+        else if (collision.gameObject.tag == "Enemy")
+        {
+            // Apply damage to the player using the HealthScript component
+            TakeDamage(damageAmount, collision.gameObject);
 
         }
     }
 
-    public void BossKilled()
+    // Method to add kills
+    public void EnemyKilled(GameObject other)
     {
-        if (gameObject.tag == "Player")
+        if (other.gameObject.CompareTag("Player"))
+        {
+            // Adds kills to player kill count
+            enemyKillCount = enemyKillCount + 1;
+            killCountText.text = "Kills: " + enemyKillCount;
+            ScoreText(gameObject);
+        }
+        else if (other.gameObject.CompareTag("Player"))
         {
             // Adds 10 kills to player kill count
-            bossKillCount = bossKillCount + 10;
+            bossKillCount = bossKillCount + 1;
             killCountText.text = "Kills: " + bossKillCount;
+            ScoreText(gameObject);
         }
+    }
+
+    public void ScoreText(GameObject other)
+    {
+        if (other.gameObject.tag == "Boss")
+        {
+            scoreCount = scoreCount + 10;
+            scoreText.text = "Score: " + scoreCount;
+        }
+        else if (other.gameObject.tag == "Enemy")
+        {
+            scoreCount = scoreCount + 1;
+            scoreText.text = "Score: " + scoreCount;
+        } 
     }
 
 

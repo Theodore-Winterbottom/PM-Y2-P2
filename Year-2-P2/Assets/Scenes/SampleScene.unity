@@ -459,17 +459,17 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 134285106}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1850017511}
-  m_RootOrder: 5
+  m_Father: {fileID: 454526861}
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 435, y: 0}
+  m_AnchoredPosition: {x: 435, y: 323}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &134285108
@@ -760,7 +760,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1850017511}
-  m_RootOrder: 6
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -1510,6 +1510,7 @@ RectTransform:
   - {fileID: 1074953861}
   - {fileID: 1464895921}
   - {fileID: 1859633538}
+  - {fileID: 134285107}
   m_Father: {fileID: 1850017511}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1553,7 +1554,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerSpeedMultiplier: 20
-  jumpForceMultiplier: 20
+  jumpForceMultiplier: 50
   PlayerIsGrounded: 0
 --- !u!65 &472783714
 BoxCollider:
@@ -1662,7 +1663,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stats: {fileID: 2013418163}
-  enemy: {fileID: 2013418164}
+  enemy: {fileID: 0}
   slider: {fileID: 1449108294}
   damageAmount: 16.6
   health: 100
@@ -1841,7 +1842,7 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 93389657376371706}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &728621406
+--- !u!114 &728621412
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1850,15 +1851,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 728621400}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f7862191dac29264bb32a865d056491b, type: 3}
+  m_Script: {fileID: 11500000, guid: 5b20ee89dcfbc3f4c9bfe7a8806231b9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   stats: {fileID: 2013418163}
-  enemy: {fileID: 2013418164}
-  slider: {fileID: 1449108294}
+  slider: {fileID: 186925767}
   damageAmount: 16.6
   health: 100
-  damage: 16.6
+  damage: 40
+  bossKillCount: 0
 --- !u!1 &729839462
 GameObject:
   m_ObjectHideFlags: 0
@@ -3067,7 +3068,7 @@ PrefabInstance:
     - target: {fileID: 93389658450476281, guid: 938bb1e1d29e4c94a9db3606c52fe248,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 2.829
+      value: 3.35
       objectReference: {fileID: 0}
     - target: {fileID: 93389658450476281, guid: 938bb1e1d29e4c94a9db3606c52fe248,
         type: 3}
@@ -3263,7 +3264,6 @@ RectTransform:
   - {fileID: 1449108293}
   - {fileID: 186925768}
   - {fileID: 499195788}
-  - {fileID: 134285107}
   - {fileID: 211710867}
   m_Father: {fileID: 0}
   m_RootOrder: 5
@@ -3656,11 +3656,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf2a7150708c5d4489b4acaff2c418ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enemy: {fileID: 0}
   deathCountText: {fileID: 1859633539}
   killCountText: {fileID: 1464895922}
-  enemyKillCount: 0
+  bossKillCountText: {fileID: 1074953862}
+  scoreText: {fileID: 134285108}
   countUp: 1
-  hourCount: 0
   minCount: 0
   secCount: 0
   firstMinute: {fileID: 217199542}
@@ -3680,7 +3681,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b20ee89dcfbc3f4c9bfe7a8806231b9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stats: {fileID: 0}
+  stats: {fileID: 2013418163}
   slider: {fileID: 186925767}
   damageAmount: 16.6
   health: 100
@@ -3820,7 +3821,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stats: {fileID: 2013418163}
-  enemy: {fileID: 2013418164}
+  enemy: {fileID: 0}
   slider: {fileID: 186925767}
   damageAmount: 16.6
   health: 100
