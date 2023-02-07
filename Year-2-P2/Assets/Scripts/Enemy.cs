@@ -58,7 +58,7 @@ public class Enemy : MonoBehaviour
         {
             // If the object's health is zero or less, destroy it
             Destroy(gameObject);
-            stats.EnemyKilled(other);
+            //stats.EnemyKilled(other);
 
         }
 
@@ -98,25 +98,21 @@ public class Enemy : MonoBehaviour
             // Adds kills to player kill count
             enemyKillCount = enemyKillCount + 1;
             killCountText.text = "Kills: " + enemyKillCount;
-            ScoreText(gameObject);
+            ScoreText();
         }
-        else if (other.gameObject.CompareTag("Player"))
-        {
-            // Adds 10 kills to player kill count
-            bossKillCount = bossKillCount + 1;
-            killCountText.text = "Kills: " + bossKillCount;
-            ScoreText(gameObject);
-        }
+        
     }
 
-    public void ScoreText(GameObject other)
+    //public void BossKilled
+
+    public void ScoreText()
     {
-        if (other.gameObject.tag == "Boss")
+        if (gameObject.tag == "Boss")
         {
             scoreCount = scoreCount + 10;
             scoreText.text = "Score: " + scoreCount;
         }
-        else if (other.gameObject.tag == "Enemy")
+        else if (gameObject.tag == "Enemy")
         {
             scoreCount = scoreCount + 1;
             scoreText.text = "Score: " + scoreCount;
