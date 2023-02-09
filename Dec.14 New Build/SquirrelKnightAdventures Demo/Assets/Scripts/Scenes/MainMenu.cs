@@ -8,20 +8,6 @@ using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour
 {
-    public void Awake()
-    {
-        DontDestroyOnLoad(transform.gameObject);
-        DontDestroyOnLoad(SettingsMenu);
-        DontDestroyOnLoad(AudioSettings);
-        DontDestroyOnLoad(VideoSettings);
-    }
-
-    public void FindObjects()
-    {
-        SettingsMenu = GameObject.Find("SettingsMenu");
-        AudioSettings = GameObject.Find("AudioSettings");
-        VideoSettings = GameObject.Find("VideoSettings");
-    }
 
     [SerializeField] private GameObject SettingsMenu;
     [SerializeField] private GameObject AudioSettings;

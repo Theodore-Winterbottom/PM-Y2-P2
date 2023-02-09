@@ -14,13 +14,6 @@ public class UIUXScript : MonoBehaviour
 
     private bool GameIsPaused;
 
-    public void Awake()
-    {
-        mainmenu = GameObject.Find("Settings").GetComponent<MainMenu>();
-        SettingsMenu = GameObject.Find("Settings");
-        mainmenu.FindObjects();
-    }
-
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
