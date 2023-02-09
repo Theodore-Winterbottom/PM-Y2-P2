@@ -55,7 +55,7 @@ public class CameraPanningScript : MonoBehaviour
     }
 }
 #endregion
-
+/*
 #region Editor Region
 [CustomEditor(typeof(CameraPanningScript))]
 public class CameraEditor : Editor
@@ -114,3 +114,5 @@ public class CameraEditor : Editor
     }
 } 
 #endregion
+
+*/

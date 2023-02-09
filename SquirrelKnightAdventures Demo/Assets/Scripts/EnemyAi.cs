@@ -131,7 +131,6 @@ public class EnemyAi : MonoBehaviour
         }
 
         Vector3 distanceToWalkPoint = transform.position - walkPoint;
-        Debug.Log(walkPoint);
         //Walkpoint reached
         if (distanceToWalkPoint.magnitude < 2f)
         {
@@ -247,7 +246,7 @@ public class EnemyAi : MonoBehaviour
 }
 #endregion
 #endregion
-
+/*
 #region Editor Region
 [CustomEditor(typeof(EnemyAi))]
 public class EnemyEditor : Editor
@@ -453,3 +452,5 @@ public class EnemyEditor : Editor
     }
 }
 #endregion
+
+*/
